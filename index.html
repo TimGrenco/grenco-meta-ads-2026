@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stündenglass — 2026 Meta Ads Executive Summary</title>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: rgba(201,168,76,0.12);
+    --gold-border: rgba(201,168,76,0.3);
+    --bg: #080808;
+    --bg2: #111;
+    --bg3: #181818;
+    --bg4: #222;
+    --text: #f0f0f0;
+    --text-dim: #777;
+    --text-mid: #aaa;
+    --border: rgba(255,255,255,0.07);
+    --red: #e05252;
+    --green: #52c97e;
+    --blue: #5299c9;
+    --meta: #1877F2;
+    --meta-dim: rgba(24,119,242,0.12);
+    --meta-border: rgba(24,119,242,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; overflow:hidden; -webkit-font-smoothing:antialiased; }
+
+  #progress-bar { position:fixed; top:0; left:0; height:2px; background:var(--gold); transition:width 0.4s ease; z-index:200; }
+
+  .deck { width:100%; height:100vh; position:relative; overflow:hidden; }
+
+  .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:56px 72px 72px; opacity:0; transform:translateX(40px); transition:opacity 0.4s ease,transform 0.4s ease; pointer-events:none; }
+  .slide.active { opacity:1; transform:translateX(0); pointer-events:all; }
+  .slide.exit { opacity:0; transform:translateX(-40px); transition:opacity 0.3s ease,transform 0.3s ease; }
+
+  .slide-inner { max-width:960px; width:100%; }
+  .slide-inner.wide { max-width:1100px; }
+
+  #nav { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:16px; z-index:100; }
+  .nav-btn { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--bg2); color:var(--gold); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; line-height:1; }
+  .nav-btn:hover { background:var(--gold-dim); border-color:var(--gold-border); }
+  .nav-btn:disabled { opacity:0.2; cursor:default; }
+  #counter { font-size:12px; color:var(--text-dim); letter-spacing:0.1em; min-width:44px; text-align:center; }
+
+  #dots { position:fixed; right:22px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:7px; z-index:100; }
+  .dot { width:5px; height:5px; border-radius:50%; background:var(--border); cursor:pointer; transition:all 0.2s; }
+  .dot.active { background:var(--gold); transform:scale(1.6); }
+  .dot:hover { background:var(--gold-border); }
+
+  .slide-num { position:fixed; top:18px; right:36px; font-size:11px; color:var(--text-dim); letter-spacing:0.1em; z-index:100; }
+
+  .label { font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; font-weight:600; }
+  .label.red { color:var(--red); }
+  .label.blue { color:var(--blue); }
+  .label.green { color:var(--green); }
+
+  h1 { font-size:clamp(38px,5.5vw,68px); font-weight:800; line-height:1.05; letter-spacing:-0.02em; }
+  h2 { font-size:clamp(26px,3.8vw,48px); font-weight:700; line-height:1.1; letter-spacing:-0.02em; }
+  h3 { font-size:clamp(16px,2vw,22px); font-weight:600; line-height:1.3; }
+  p  { font-size:clamp(14px,1.6vw,17px); line-height:1.7; color:rgba(240,240,240,0.75); }
+
+  .gold { color:var(--gold); }
+  .dim  { color:var(--text-dim); }
+  .mid  { color:var(--text-mid); }
+  .red  { color:var(--red); }
+  .green { color:var(--green); }
+  .blue  { color:var(--blue); }
+
+  .divider { width:40px; height:2px; background:var(--gold); margin:18px 0; }
+  .divider.red { background:var(--red); }
+
+  .chip { display:inline-flex; align-items:center; gap:6px; border-radius:100px; padding:4px 12px; font-size:12px; font-weight:600; letter-spacing:0.03em; }
+  .chip.gold { background:var(--gold-dim); border:1px solid var(--gold-border); color:var(--gold); }
+  .chip.dark { background:var(--bg3); border:1px solid var(--border); color:var(--text-mid); }
+  .chip.red  { background:rgba(224,82,82,0.1); border:1px solid rgba(224,82,82,0.3); color:var(--red); }
+  .chip.green { background:rgba(82,201,126,0.1); border:1px solid rgba(82,201,126,0.3); color:var(--green); }
+  .chip.meta { background:var(--meta-dim); border:1px solid var(--meta-border); color:#60a5fa; }
+
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:28px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:24px; }
+  .col-6040 { display:grid; grid-template-columns:3fr 2fr; gap:28px; margin-top:24px; align-items:start; }
+  .col-5050 { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:24px; align-items:start; }
+  .col-4060 { display:grid; grid-template-columns:2fr 3fr; gap:28px; margin-top:24px; align-items:start; }
+
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:22px; }
+  .card.gold-border { border-color:var(--gold-border); background:var(--gold-dim); }
+  .card.red-border { border-color:rgba(224,82,82,0.3); background:rgba(224,82,82,0.06); }
+  .card.green-border { border-color:rgba(82,201,126,0.3); background:rgba(82,201,126,0.06); }
+  .card.meta-border { border-color:var(--meta-border); background:var(--meta-dim); }
+  .card-icon { font-size:26px; margin-bottom:12px; }
+  .card h3 { font-size:16px; margin-bottom:7px; }
+  .card p { font-size:13px; line-height:1.55; color:var(--text-mid); }
+
+  .stat-row { display:flex; gap:16px; margin-top:24px; }
+  .stat { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px; text-align:center; }
+  .stat.red { border-color:rgba(224,82,82,0.3); background:rgba(224,82,82,0.06); }
+  .stat.gold { border-color:var(--gold-border); background:var(--gold-dim); }
+  .stat.green { border-color:rgba(82,201,126,0.3); background:rgba(82,201,126,0.06); }
+  .stat-val { font-size:clamp(22px,3vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:6px; }
+  .stat-val.red { color:var(--red); }
+  .stat-val.gold { color:var(--gold); }
+  .stat-val.green { color:var(--green); }
+  .stat-label { font-size:12px; color:var(--text-dim); letter-spacing:0.05em; text-transform:uppercase; }
+
+  .note { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:12px 16px; font-size:12.5px; color:var(--text-mid); line-height:1.55; margin-top:16px; }
+  .note strong { color:var(--text); }
+  .note.red { border-color:rgba(224,82,82,0.3); background:rgba(224,82,82,0.06); }
+  .note.gold { border-color:var(--gold-border); background:var(--gold-dim); }
+
+  .big-number { font-size:clamp(48px,7vw,90px); font-weight:800; letter-spacing:-0.03em; line-height:1; }
+
+  .perf-table { width:100%; border-collapse:collapse; margin-top:20px; }
+  .perf-table th { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); font-weight:600; padding:8px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  .perf-table td { font-size:14px; padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+  .perf-table tr:last-child td { border-bottom:none; }
+  .perf-table .total-row td { border-top:1px solid var(--gold-border); font-weight:700; color:var(--gold); background:var(--gold-dim); }
+  .perf-table .good { color:var(--green); font-weight:700; }
+  .perf-table .bad { color:var(--red); font-weight:700; }
+  .perf-table .brand-name { font-weight:700; color:var(--text); }
+
+  .month-row { display:flex; gap:8px; margin-top:20px; align-items:stretch; }
+  .month-col { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 12px; text-align:center; }
+  .month-col.highlight { border-color:var(--gold-border); background:var(--gold-dim); }
+  .month-col.bad { border-color:rgba(224,82,82,0.3); background:rgba(224,82,82,0.06); }
+  .month-label { font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .month-roas { font-size:22px; font-weight:800; letter-spacing:-0.02em; }
+  .month-roas.green { color:var(--green); }
+  .month-roas.gold { color:var(--gold); }
+  .month-roas.red { color:var(--red); }
+  .month-spend { font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+  .failure-card { background:rgba(224,82,82,0.06); border:1px solid rgba(224,82,82,0.25); border-radius:14px; padding:20px; margin-bottom:14px; }
+  .failure-card:last-child { margin-bottom:0; }
+  .failure-header { display:flex; align-items:flex-start; gap:12px; margin-bottom:10px; }
+  .failure-num { font-size:11px; font-weight:800; letter-spacing:0.1em; background:rgba(224,82,82,0.2); color:var(--red); border:1px solid rgba(224,82,82,0.4); border-radius:6px; padding:3px 10px; flex-shrink:0; }
+  .failure-title { font-size:16px; font-weight:700; color:var(--text); }
+  .failure-body { font-size:13px; color:var(--text-mid); line-height:1.55; }
+  .failure-impact { display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:12px; font-weight:700; color:var(--red); background:rgba(224,82,82,0.1); border:1px solid rgba(224,82,82,0.3); border-radius:6px; padding:4px 10px; }
+
+  .timeline { display:flex; flex-direction:column; gap:0; margin-top:20px; }
+  .tl-item { display:grid; grid-template-columns:90px 1fr; gap:20px; position:relative; padding-bottom:20px; }
+  .tl-item:last-child { padding-bottom:0; }
+  .tl-item::before { content:''; position:absolute; left:44px; top:32px; bottom:0; width:1px; background:var(--border); }
+  .tl-item:last-child::before { display:none; }
+  .tl-week { display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .tl-dot { width:12px; height:12px; border-radius:50%; background:var(--gold); border:2px solid var(--bg); flex-shrink:0; }
+  .tl-dot.red { background:var(--red); }
+  .tl-dot.green { background:var(--green); }
+  .tl-week-label { font-size:10px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; text-align:center; }
+  .tl-content h3 { font-size:14px; font-weight:700; margin-bottom:3px; }
+  .tl-content p { font-size:12.5px; color:var(--text-mid); line-height:1.5; }
+
+  .vs-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
+  .vs-col { border-radius:14px; padding:20px; }
+  .vs-col.bad { background:rgba(224,82,82,0.06); border:1px solid rgba(224,82,82,0.25); }
+  .vs-col.good { background:rgba(82,201,126,0.06); border:1px solid rgba(82,201,126,0.25); }
+  .vs-title { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+  .vs-title.red { color:var(--red); }
+  .vs-title.green { color:var(--green); }
+  .vs-item { font-size:13px; color:var(--text-mid); line-height:1.55; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .vs-item:last-child { border-bottom:none; }
+  .vs-item strong { color:var(--text); }
+
+  .row-list { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+  .row-item { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; }
+  .row-num { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-dim); border:1px solid var(--gold-border); border-radius:6px; padding:2px 8px; flex-shrink:0; margin-top:1px; }
+  .row-body h4 { font-size:14px; font-weight:600; margin-bottom:3px; }
+  .row-body p { font-size:12.5px; color:var(--text-mid); line-height:1.45; }
+
+  .savings-table { width:100%; border-collapse:collapse; margin-top:20px; }
+  .savings-table th { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); font-weight:600; padding:8px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  .savings-table td { font-size:14px; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+  .savings-table tr:last-child td { border-bottom:none; font-weight:700; font-size:16px; color:var(--gold); }
+  .savings-table .was { color:var(--red); text-decoration:line-through; opacity:0.7; }
+  .savings-table .now { color:var(--green); }
+  .savings-table .save { color:var(--gold); font-weight:700; }
+
+  .bar-chart { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+  .bar-row { display:flex; align-items:center; gap:12px; }
+  .bar-label { font-size:12px; color:var(--text-mid); width:60px; text-align:right; flex-shrink:0; }
+  .bar-track { flex:1; height:28px; background:var(--bg3); border-radius:6px; overflow:hidden; position:relative; }
+  .bar-fill { height:100%; border-radius:6px; display:flex; align-items:center; padding-left:10px; font-size:12px; font-weight:700; transition:width 1s ease; }
+  .bar-fill.green { background:rgba(82,201,126,0.25); color:var(--green); border:1px solid rgba(82,201,126,0.3); }
+  .bar-fill.gold { background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold-border); }
+  .bar-fill.red { background:rgba(224,82,82,0.15); color:var(--red); border:1px solid rgba(224,82,82,0.3); }
+  .bar-fill.blue { background:rgba(82,153,201,0.15); color:var(--blue); border:1px solid rgba(82,153,201,0.3); }
+
+  .msg { display:flex; gap:8px; align-items:flex-start; }
+  .msg.user { flex-direction:row-reverse; }
+  .msg-av { width:26px; height:26px; border-radius:50%; background:var(--bg3); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+  .msg.user .msg-av { background:var(--gold-dim); border-color:var(--gold-border); }
+  .msg-text { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:8px 12px; font-size:13px; line-height:1.5; max-width:82%; color:var(--text-mid); }
+  .msg.user .msg-text { background:var(--gold-dim); border-color:var(--gold-border); color:var(--text); }
+  .msg-text strong { color:var(--gold); font-weight:600; }
+
+  .chat { background:var(--bg2); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-top:20px; }
+  .chat-header { background:var(--bg3); border-bottom:1px solid var(--border); padding:10px 16px; display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text-mid); }
+  .chat-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); }
+  .chat-body { padding:16px; display:flex; flex-direction:column; gap:10px; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="slide-num" id="slide-num">1 / 14</div>
+
+<div class="deck">
+
+
+<!-- ══ SLIDE 1: TITLE ══ -->
+<div class="slide active" id="s0">
+<div class="slide-inner">
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:28px;">
+    <div class="chip dark">● Jan 1 – May 4, 2026</div>
+    <div class="chip red">● 3 Documented Agency Failures</div>
+  </div>
+  <h1>2026 Meta Ads<br><span class="gold">Executive Review</span></h1>
+  <div class="divider"></div>
+  <p style="max-width:560px;font-size:clamp(16px,1.8vw,20px);">A full YTD analysis of Meta ad performance across all three Grenco Labs brands — where we won, where the agency cost us six figures, and what we're doing differently in 2026 H2.</p>
+  <div style="margin-top:36px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+    <div class="chip gold">Stündenglass</div>
+    <div class="chip dark">Grenco Science</div>
+    <div class="chip red">Grenco Goods ✕</div>
+    <span style="font-size:13px;color:var(--text-dim);">Prepared by Claude · May 5, 2026</span>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 2: YTD SUMMARY TABLE ══ -->
+<div class="slide" id="s1">
+<div class="slide-inner wide">
+  <div class="label">Year-to-Date Performance</div>
+  <h2>Jan 1 – May 4, 2026<br><span class="gold">All Three Brands</span></h2>
+  <div class="divider"></div>
+
+  <table class="perf-table">
+    <thead>
+      <tr>
+        <th>Brand</th>
+        <th>Ad Spend</th>
+        <th>Revenue (CV)</th>
+        <th>Blended ROAS</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="brand-name">Stündenglass</td>
+        <td>$75,064</td>
+        <td>$346,700</td>
+        <td class="good">4.6×</td>
+        <td><span class="chip green">● Active</span></td>
+      </tr>
+      <tr>
+        <td class="brand-name">Grenco Science</td>
+        <td>$47,000</td>
+        <td>$216,000</td>
+        <td class="good">4.6×</td>
+        <td><span class="chip green">● Active</span></td>
+      </tr>
+      <tr>
+        <td class="brand-name">Grenco Goods</td>
+        <td>$18,200</td>
+        <td>$17,600</td>
+        <td class="bad">0.97×</td>
+        <td><span class="chip red">● Shut Off</span></td>
+      </tr>
+      <tr class="total-row">
+        <td>All Brands Combined</td>
+        <td>$140,264</td>
+        <td>$580,300</td>
+        <td>4.1× blended</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:16px;">
+    <strong>Note on Grenco Goods:</strong> $18,200 spent at sub-1× ROAS over 3+ months — a net loss on every dollar spent. The agency continued billing and running ads without raising a flag until we pulled the plug.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 3: STUNDENGLASS MONTHLY ══ -->
+<div class="slide" id="s2">
+<div class="slide-inner wide">
+  <div class="label">Stündenglass Deep Dive</div>
+  <h2>Monthly ROAS &amp; Spend<br><span class="gold">Jan – May 2026</span></h2>
+  <div class="divider"></div>
+
+  <div class="month-row">
+    <div class="month-col">
+      <div class="month-label">January</div>
+      <div class="month-roas gold">2.9×</div>
+      <div class="month-spend">$21,444 spend</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--red);">Jan 12–13: 0.55–0.97×</div>
+    </div>
+    <div class="month-col">
+      <div class="month-label">February</div>
+      <div class="month-roas gold">4.0×</div>
+      <div class="month-spend">$20,544 spend</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--red);">Feb 20: 0.11× ($1,440)</div>
+    </div>
+    <div class="month-col">
+      <div class="month-label">March</div>
+      <div class="month-roas gold">4.1×</div>
+      <div class="month-spend">$16,804 spend</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--text-dim);">Budget declining</div>
+    </div>
+    <div class="month-col bad">
+      <div class="month-label">Pre-4/20</div>
+      <div class="month-roas red">↓ $50/day</div>
+      <div class="month-spend">Mar 27 – Apr 12</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--red);">17-day pullback</div>
+    </div>
+    <div class="month-col highlight">
+      <div class="month-label">4/20 Sale</div>
+      <div class="month-roas green">11.8×</div>
+      <div class="month-spend">$6,734 spend</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--green);">$79,167 revenue</div>
+    </div>
+    <div class="month-col">
+      <div class="month-label">Post-4/20</div>
+      <div class="month-roas gold">4.8×</div>
+      <div class="month-spend">$10,441 spend</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--green);">$50,128 revenue</div>
+    </div>
+  </div>
+
+  <div class="stat-row" style="margin-top:20px;">
+    <div class="stat gold">
+      <div class="stat-val gold">$346,700</div>
+      <div class="stat-label">YTD Revenue Attributed</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val green">4.6×</div>
+      <div class="stat-label">Blended ROAS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--text);">$75,064</div>
+      <div class="stat-label">Total Ad Spend</div>
+    </div>
+    <div class="stat red">
+      <div class="stat-val red">$120K+</div>
+      <div class="stat-label">Est. Missed Revenue</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 4: GRENCO SCIENCE MONTHLY ══ -->
+<div class="slide" id="s3">
+<div class="slide-inner wide">
+  <div class="label">Grenco Science Deep Dive</div>
+  <h2>Steady Performer, Same<br><span class="gold">Agency Mistakes</span></h2>
+  <div class="divider"></div>
+
+  <div class="month-row">
+    <div class="month-col">
+      <div class="month-label">January</div>
+      <div class="month-roas gold">3.5×</div>
+      <div class="month-spend">$12,745 spend</div>
+    </div>
+    <div class="month-col">
+      <div class="month-label">February</div>
+      <div class="month-roas gold">4.2×</div>
+      <div class="month-spend">~$10,500 spend</div>
+    </div>
+    <div class="month-col">
+      <div class="month-label">March</div>
+      <div class="month-roas gold">4.3×</div>
+      <div class="month-spend">~$10,600 spend</div>
+    </div>
+    <div class="month-col bad">
+      <div class="month-label">Pre-4/20</div>
+      <div class="month-roas red">↓ $50/day</div>
+      <div class="month-spend">Apr 1–9</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--red);">Same pullback</div>
+    </div>
+    <div class="month-col highlight">
+      <div class="month-label">4/20 Sale</div>
+      <div class="month-roas green">12.5×</div>
+      <div class="month-spend">Apr 20: $686</div>
+      <div class="month-spend" style="margin-top:4px;font-size:10px;color:var(--green);">$8,585 revenue</div>
+    </div>
+  </div>
+
+  <div class="stat-row" style="margin-top:20px;">
+    <div class="stat gold">
+      <div class="stat-val gold">$216,000</div>
+      <div class="stat-label">YTD Revenue Attributed</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val green">4.6×</div>
+      <div class="stat-label">Blended ROAS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--text);">$47,000</div>
+      <div class="stat-label">Total Ad Spend</div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:16px;">
+    <strong>Pattern is consistent across both brands:</strong> Grenco Science is a reliable 4–4.5× ROAS performer, but suffered the exact same pre-4/20 budget collapse as Stündenglass — confirming this was an agency-wide decision, not a brand-specific issue.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 5: GRENCO GOODS ══ -->
+<div class="slide" id="s4">
+<div class="slide-inner">
+  <div class="label red">Grenco Goods — Post-Mortem</div>
+  <h2>$18,200 Burned.<br><span class="red">Never Flagged.</span></h2>
+  <div class="divider red"></div>
+
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="stat red">
+      <div class="stat-val red">$18,200</div>
+      <div class="stat-label">Total Ad Spend</div>
+    </div>
+    <div class="stat red">
+      <div class="stat-val red">0.97×</div>
+      <div class="stat-label">Blended ROAS</div>
+    </div>
+    <div class="stat red">
+      <div class="stat-val red">3+ Months</div>
+      <div class="stat-label">Agency Never Raised Flag</div>
+    </div>
+  </div>
+
+  <div class="month-row" style="margin-top:20px;">
+    <div class="month-col bad">
+      <div class="month-label">January</div>
+      <div class="month-roas red">1.0×</div>
+      <div class="month-spend">$8,700 spend</div>
+    </div>
+    <div class="month-col bad">
+      <div class="month-label">February</div>
+      <div class="month-roas red">0.8×</div>
+      <div class="month-spend">$7,000 spend</div>
+    </div>
+    <div class="month-col bad">
+      <div class="month-label">March (wind-down)</div>
+      <div class="month-roas red">0.8×</div>
+      <div class="month-spend">$2,500 spend</div>
+    </div>
+  </div>
+
+  <div class="note red" style="margin-top:20px;">
+    <strong>What should have happened:</strong> Any competent account manager flags a brand operating at sub-1× ROAS after 14 days and pauses spend pending a creative or product audit. The agency continued running — and billing — for 90+ days. We shut it down ourselves when we pulled the data.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 6: AGENCY FAILURE #1 ══ -->
+<div class="slide" id="s5">
+<div class="slide-inner wide">
+  <div class="label red">Agency Failure #1 of 3</div>
+  <h2>The Pre-4/20<br><span class="red">Shutdown</span></h2>
+  <div class="divider red"></div>
+
+  <div class="col-5050" style="margin-top:20px;">
+    <div>
+      <div style="margin-bottom:14px;">
+        <div class="chip red" style="margin-bottom:10px;">● Mar 27 – Apr 12 · 17 Days</div>
+        <p style="font-size:14px;">The agency cut both Stündenglass and Grenco Science from <strong style="color:var(--text);">~$600–700/day</strong> down to <strong style="color:var(--red);">$43–165/day</strong> — immediately before their biggest annual revenue event of the year.</p>
+      </div>
+
+      <div class="bar-chart" style="margin-top:16px;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Daily Spend During Pullback</div>
+        <div class="bar-row">
+          <div class="bar-label">Feb avg</div>
+          <div class="bar-track">
+            <div class="bar-fill green" style="width:100%;">$660/day</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Mar 26</div>
+          <div class="bar-track">
+            <div class="bar-fill gold" style="width:85%;">$580/day</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Apr 1</div>
+          <div class="bar-track">
+            <div class="bar-fill red" style="width:22%;">$148/day</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Apr 4</div>
+          <div class="bar-track">
+            <div class="bar-fill red" style="width:7%;">$44/day</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Apr 8</div>
+          <div class="bar-track">
+            <div class="bar-fill red" style="width:7%;">$48/day</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Apr 13+</div>
+          <div class="bar-track">
+            <div class="bar-fill green" style="width:65%;">Sale begins</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card red-border" style="margin-bottom:14px;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">The Smoking Gun</div>
+        <p style="font-size:13px;color:var(--text-mid);line-height:1.55;">During the pullback, the little spend remaining was generating insane ROAS — because audience intent was already high ahead of 4/20. The accounts were primed and converting at peak efficiency. The agency pulled out at exactly the wrong moment.</p>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:13px;"><span style="color:var(--text-dim);">Apr 4:</span> <strong style="color:var(--gold);">43.6× ROAS</strong> on $44 spend</div>
+          <div style="font-size:13px;"><span style="color:var(--text-dim);">Apr 8:</span> <strong style="color:var(--gold);">50× ROAS</strong> on $48 spend</div>
+          <div style="font-size:13px;"><span style="color:var(--text-dim);">Apr 10:</span> <strong style="color:var(--gold);">27× ROAS</strong> on $65 spend</div>
+        </div>
+      </div>
+
+      <div class="stat red">
+        <div class="stat-val red">$90K–$150K</div>
+        <div class="stat-label">Estimated Missed Revenue</div>
+      </div>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px;">Based on prior daily spend × 4/20-period ROAS applied to the 17 suppressed days.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 7: AGENCY FAILURE #2 ══ -->
+<div class="slide" id="s6">
+<div class="slide-inner wide">
+  <div class="label red">Agency Failure #2 of 3</div>
+  <h2>9 Days of 7×+ ROAS.<br><span class="red">Budget Never Moved.</span></h2>
+  <div class="divider red"></div>
+
+  <p style="font-size:14px;color:var(--text-mid);margin-top:8px;max-width:700px;">The most basic rule in paid media: when ROAS is high, scale spend. The agency consistently held budgets flat — or let them decline — on days the algorithm was working perfectly.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;">
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Feb 6, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">8.9×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget held flat</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Feb 9, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">8.3×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget held flat</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Feb 18, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">8.8×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget held flat</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Feb 25, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">7.4×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget held flat</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Mar 13, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">10.3×</div>
+      <div style="font-size:12px;color:var(--text-dim);">$434 spend — no scale</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Mar 14, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">8.6×</div>
+      <div style="font-size:12px;color:var(--text-dim);">$418 spend — no scale</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Mar 18, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">8.2×</div>
+      <div style="font-size:12px;color:var(--text-dim);">$413 spend — no scale</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Mar 25, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">6.3×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget declining</div>
+    </div>
+    <div class="card red-border" style="padding:14px;">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Mar 2, 2026</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">6.4×</div>
+      <div style="font-size:12px;color:var(--text-dim);">Budget held flat</div>
+    </div>
+  </div>
+
+  <div class="note red" style="margin-top:16px;">
+    <strong>Conservative estimate:</strong> If each high-ROAS day had budget doubled (a standard scaling move), that's ~$50K–$80K in incremental revenue left on the table from these 9 days alone.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 8: AGENCY FAILURE #3 ══ -->
+<div class="slide" id="s7">
+<div class="slide-inner">
+  <div class="label red">Agency Failure #3 of 3</div>
+  <h2>The Days That<br><span class="red">Should Never Happen</span></h2>
+  <div class="divider red"></div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="failure-card">
+      <div class="failure-header">
+        <div class="failure-num">EVENT A</div>
+        <div class="failure-title">Feb 20, 2026 — Stündenglass</div>
+      </div>
+      <div class="failure-body">
+        <strong style="color:var(--text);">$1,440 spent at 0.11× ROAS.</strong> That's $1,285 in net losses on a single day. A monitoring system with a basic ROAS floor (e.g., pause if ROAS &lt; 0.8 by 2PM) would have stopped this before noon. Instead, the campaign ran all day.
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <div class="failure-impact">● $1,285 net loss in one day</div>
+        <div class="failure-impact">● No automated kill switch</div>
+      </div>
+    </div>
+
+    <div class="failure-card">
+      <div class="failure-header">
+        <div class="failure-num">EVENT B</div>
+        <div class="failure-title">Grenco Goods — Q1 2026</div>
+      </div>
+      <div class="failure-body">
+        <strong style="color:var(--text);">Three months, $18,200 spent, sub-1× ROAS the entire time.</strong> No proactive communication. No recommendation to pause or pivot creative. No alert that we were spending more than we were making. We found out when we pulled the data ourselves.
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <div class="failure-impact">● $600+/mo in agency fees</div>
+        <div class="failure-impact">● Never flagged</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:16px;">
+    <strong>These aren't edge cases — they're accountability failures.</strong> A daily-monitoring system (automated or human) catches both of these within 24 hours. Neither was caught. Both indicate the agency was managing on a weekly or bi-weekly review cycle, not daily.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 9: WHAT CLAUDE WOULD HAVE DONE ══ -->
+<div class="slide" id="s8">
+<div class="slide-inner wide">
+  <div class="label" style="color:#60a5fa;">What Changes Under Claude-Managed Accounts</div>
+  <h2>Daily Optimization.<br><span class="gold">Zero Oversight Gaps.</span></h2>
+  <div class="divider"></div>
+
+  <div class="vs-row">
+    <div class="vs-col bad">
+      <div class="vs-title red">● Agency Approach (What Happened)</div>
+      <div class="vs-item"><strong>Pre-4/20:</strong> Cut spend 90% for 17 days heading into the biggest sale of the year. No explanation given.</div>
+      <div class="vs-item"><strong>High-ROAS days:</strong> Budgets held flat on 9 confirmed days with 7–10× ROAS — all scaling opportunities missed.</div>
+      <div class="vs-item"><strong>Feb 20 disaster:</strong> $1,440 burned at 0.11× ROAS with no kill switch, no alert, campaign ran all day.</div>
+      <div class="vs-item"><strong>Grenco Goods:</strong> 90 days of sub-1× ROAS, $18,200 spent, never flagged to client.</div>
+      <div class="vs-item"><strong>Reporting:</strong> Weekly or bi-weekly cadence — opportunities and disasters both discovered late.</div>
+    </div>
+
+    <div class="vs-col good">
+      <div class="vs-title green">● Claude MCP Approach (Going Forward)</div>
+      <div class="vs-item"><strong>Pre-sale buildup:</strong> Ramp spend 2–3 weeks before 4/20. Audience warming = lower CPA on sale day. Data-driven, not guesswork.</div>
+      <div class="vs-item"><strong>ROAS-triggered scaling:</strong> Rule: if ROAS &gt; 5× for 48h, increase daily budget 20–30%. Compounding effect over a week.</div>
+      <div class="vs-item"><strong>ROAS floor:</strong> If pixel ROAS &lt; 0.8 by 2PM, pause campaign and flag. Daily review, not weekly.</div>
+      <div class="vs-item"><strong>Brand profitability gate:</strong> If any brand falls below 1× for 14 days, automatic pause + escalation to team.</div>
+      <div class="vs-item"><strong>Reporting:</strong> Every morning — spend, ROAS, recommendations, and actions taken from prior day.</div>
+    </div>
+  </div>
+
+  <div class="note gold" style="margin-top:16px;">
+    <strong>Claude runs on the official Meta Ads MCP</strong> (launched April 29, 2026 at mcp.facebook.com/ads). 29 tools. OAuth-connected directly to your Business Manager. Can read data, adjust budgets, pause campaigns, and generate reports — all in one daily session.
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 10: 4/20 2027 PLAYBOOK ══ -->
+<div class="slide" id="s9">
+<div class="slide-inner">
+  <div class="label green">4/20 2027 Playbook</div>
+  <h2>How We'll Capture<br><span class="gold">2× the Revenue Next Year</span></h2>
+  <div class="divider"></div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot green"></div>
+        <div class="tl-week-label">4 Wks Out</div>
+      </div>
+      <div class="tl-content">
+        <h3>Audience Warming Begins</h3>
+        <p>Ramp Meta spend 20–30% above baseline. Run top-of-funnel video content, collaboration drops, product launches. Build retargeting pool. Cost: ~$2,000 extra. Payoff: lower CPA on sale day.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot gold"></div>
+        <div class="tl-week-label">2 Wks Out</div>
+      </div>
+      <div class="tl-content">
+        <h3>Tease Campaign + Wishlist Push</h3>
+        <p>Deploy "4/20 is coming" creative. Email capture for early access. Begin Klaviyo/Attentive SMS list build. Retargeting campaigns on full catalog — not just hero SKUs.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot gold"></div>
+        <div class="tl-week-label">1 Wk Out</div>
+      </div>
+      <div class="tl-content">
+        <h3>Peak Spend + Budget Lock</h3>
+        <p>Set daily budgets at 2× normal. Do NOT touch them. Lock creative. Stop A/B testing. Let the algorithm run. Claude monitors for anomalies only — no discretionary changes this week.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot" style="background:var(--green);"></div>
+        <div class="tl-week-label">Apr 13–20</div>
+      </div>
+      <div class="tl-content">
+        <h3>Sale Week — Hands Off, Eyes On</h3>
+        <p>Monitor every 6 hours. Scale any campaign with ROAS &gt; 10× by 15% same day. Kill anything under 2× immediately. Estimated 2027 target: $160K+ in Meta-attributed revenue during sale week alone.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 11: FRESH ACCOUNT STRATEGY ══ -->
+<div class="slide" id="s10">
+<div class="slide-inner">
+  <div class="label" style="color:#60a5fa;">Account Migration Strategy</div>
+  <h2>Fresh Accounts.<br><span class="gold">Our BM. Our Data.</span></h2>
+  <div class="divider"></div>
+
+  <div class="row-list" style="margin-top:20px;">
+    <div class="row-item">
+      <div class="row-num">01</div>
+      <div class="row-body">
+        <h4>Create New Meta Business Manager</h4>
+        <p>Under a Grenco Labs business email. Register ad accounts under "Home Decor &amp; Design" and "Art &amp; Collectibles" — not tobacco accessories. This is the same classification the agency uses.</p>
+      </div>
+    </div>
+    <div class="row-item">
+      <div class="row-num">02</div>
+      <div class="row-body">
+        <h4>Spin Up 3 Ad Accounts Per Brand</h4>
+        <p>1 primary + 2 warm backups. Fund all three. Run $10–20/day of brand content on backup accounts for 3 weeks to establish spend history before launching product campaigns.</p>
+      </div>
+    </div>
+    <div class="row-item">
+      <div class="row-num">03</div>
+      <div class="row-body">
+        <h4>Advantage+ Shopping Campaigns (ASC) + Catalog</h4>
+        <p>Mirror exactly what the agency runs today. Catalog ads are the safest format for this product category — no "creative" to review, just product images and titles pulled from feed. Product titles: engineering/design language only.</p>
+      </div>
+    </div>
+    <div class="row-item">
+      <div class="row-num">04</div>
+      <div class="row-body">
+        <h4>Parallel Run — 1 Week Before Full Migration</h4>
+        <p>Run new accounts at matching budget alongside agency accounts. Compare Triple Whale ROAS side-by-side. If within 10–20% for 5 consecutive days → migrate and give agency 30-day notice.</p>
+      </div>
+    </div>
+    <div class="row-item">
+      <div class="row-num">05</div>
+      <div class="row-body">
+        <h4>On Exit: Request from Agency</h4>
+        <p>All active campaign IDs, top-performing audience segments, proven ad creative (compliance-proven = valuable), and full account structure documentation. We own our pixel data and Klaviyo lists regardless.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 12: CLAUDE DAILY WORKFLOW ══ -->
+<div class="slide" id="s11">
+<div class="slide-inner wide">
+  <div class="label" style="color:#60a5fa;">Claude + Meta MCP Daily Workflow</div>
+  <h2>15 Minutes a Day<br><span class="gold">Replaces a $6,750/mo Agency</span></h2>
+  <div class="divider"></div>
+
+  <div class="col-5050">
+    <div>
+      <p style="font-size:14px;margin-bottom:16px;">Each morning, one Claude session covers everything the agency used to do — plus daily monitoring they didn't.</p>
+
+      <div class="row-list" style="margin-top:0;">
+        <div class="row-item">
+          <div class="row-num">AM</div>
+          <div class="row-body">
+            <h4>Pull yesterday's data from Meta MCP</h4>
+            <p>29 tools, OAuth-connected. ROAS by campaign, spend pacing, frequency, audience saturation.</p>
+          </div>
+        </div>
+        <div class="row-item">
+          <div class="row-num">+TW</div>
+          <div class="row-body">
+            <h4>Cross-reference Triple Whale</h4>
+            <p>Meta's native ROAS vs. TW pixel attribution. Flag any gap &gt; 20% (indicates tracking issue or iOS attribution drift).</p>
+          </div>
+        </div>
+        <div class="row-item">
+          <div class="row-num">ACT</div>
+          <div class="row-body">
+            <h4>Execute budget changes via MCP</h4>
+            <p>Scale winners, pause losers, flag creative fatigue. All logged with reasoning for team review.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat">
+      <div class="chat-header">
+        <div class="chat-dot"></div>
+        Claude × Meta Ads MCP — Daily Briefing
+      </div>
+      <div class="chat-body">
+        <div class="msg user">
+          <div class="msg-av">👤</div>
+          <div class="msg-text">Morning review. Pull yesterday's Meta performance for Stündenglass and Grenco Science.</div>
+        </div>
+        <div class="msg">
+          <div class="msg-av" style="background:var(--gold-dim);border-color:var(--gold-border);font-size:12px;">AI</div>
+          <div class="msg-text"><strong>Stündenglass ASC:</strong> $620 spend, <strong>6.2× ROAS</strong> — up from 4.1× Monday. Recommend 20% budget increase to $744/day.<br><br><strong>Grenco Science retargeting:</strong> frequency hit 3.4 — creative fatigue. Rotate in the collab creative from last month.<br><br><strong>Action taken:</strong> Stündenglass budget scaled. Grenco Science flagged for creative swap — confirm to proceed?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 13: FINANCIAL CASE ══ -->
+<div class="slide" id="s12">
+<div class="slide-inner">
+  <div class="label green">Financial Case</div>
+  <h2>What We Save<br><span class="gold">Running This In-House</span></h2>
+  <div class="divider"></div>
+
+  <table class="savings-table">
+    <thead>
+      <tr>
+        <th>Line Item</th>
+        <th>With Agency (Current)</th>
+        <th>Self-Run + Claude</th>
+        <th>Monthly Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ad Spend</td>
+        <td>~$25,000/mo</td>
+        <td class="now">~$25,000/mo</td>
+        <td style="color:var(--text-mid);">Unchanged</td>
+      </tr>
+      <tr>
+        <td>Agency Management Fee</td>
+        <td class="was">$5,000–$6,750/mo</td>
+        <td class="now">$0</td>
+        <td class="save">+$5,000–$6,750</td>
+      </tr>
+      <tr>
+        <td>Claude (Pro / API)</td>
+        <td>$0</td>
+        <td class="was">~$20–100/mo</td>
+        <td style="color:var(--text-mid);">−$100</td>
+      </tr>
+      <tr>
+        <td>Internal Time</td>
+        <td>~0 hrs (agency handles)</td>
+        <td>~15 min/day</td>
+        <td style="color:var(--text-mid);">Minimal</td>
+      </tr>
+      <tr>
+        <td>Estimated ROAS Improvement</td>
+        <td>—</td>
+        <td class="now">+0.5–1.0× from daily optimization</td>
+        <td class="save">+$12,500–$25,000/mo</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" style="text-align:right;">Total Monthly Benefit</td>
+        <td class="save">$17,500–$31,750/mo</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="stat-row" style="margin-top:20px;">
+    <div class="stat green">
+      <div class="stat-val green">$81K</div>
+      <div class="stat-label">Agency Fees Saved Annually</div>
+    </div>
+    <div class="stat gold">
+      <div class="stat-val gold">$210K+</div>
+      <div class="stat-label">Additional Revenue (Conservative)</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val green">$291K</div>
+      <div class="stat-label">Total Annual Upside</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ SLIDE 14: 90-DAY ROADMAP ══ -->
+<div class="slide" id="s13">
+<div class="slide-inner">
+  <div class="label">What Happens Next</div>
+  <h2>90-Day Roadmap<br><span class="gold">To Full Independence</span></h2>
+  <div class="divider"></div>
+
+  <div class="timeline" style="margin-top:24px;">
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 1</div>
+      </div>
+      <div class="tl-content">
+        <h3>Build Infrastructure</h3>
+        <p>Create Grenco Labs Business Manager. Set up 3 ad accounts per brand (1 primary + 2 warm backups). Install Meta Pixel + Conversions API on stundenglass.com. Apply for Business Verification. Build Commerce Manager product catalog from existing feed.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 2</div>
+      </div>
+      <div class="tl-content">
+        <h3>Launch Campaigns</h3>
+        <p>Advantage+ Shopping Campaigns connected to catalog. Retargeting (dynamic product ads). Lookalike campaigns from Klaviyo customer list. Start both brands at 50% of current agency budget.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 3</div>
+      </div>
+      <div class="tl-content">
+        <h3>Connect Claude MCP + Establish Daily Cadence</h3>
+        <p>Authenticate Claude via mcp.facebook.com/ads OAuth. Set up Triple Whale → Claude morning briefing workflow. Establish ROAS floor rules and scaling triggers. First week of daily optimization logs.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">
+        <div class="tl-dot green"></div>
+        <div class="tl-week-label">Week 4</div>
+      </div>
+      <div class="tl-content">
+        <h3>Parallel Run + Migration Decision</h3>
+        <p>Match budget vs. agency side-by-side for 7 days. If our ROAS ≥ agency ROAS for 5 consecutive days → give 30-day written notice. Full budget transferred during notice period. Done.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="note gold" style="margin-top:16px;">
+    <strong>Next action:</strong> Review this deck with the team. Green light on Week 1 infrastructure build. Estimated time to first independent campaign: 14 days.
+  </div>
+</div>
+</div>
+
+
+</div><!-- end .deck -->
+
+<div id="nav">
+  <button class="nav-btn" id="prev" onclick="go(-1)">&#8592;</button>
+  <span id="counter">1 / 14</span>
+  <button class="nav-btn" id="next" onclick="go(1)">&#8594;</button>
+</div>
+
+<div id="dots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  const dotsEl = document.getElementById('dots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit');
+      if (i === cur) s.classList.add('active');
+    });
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + total;
+    document.getElementById('slide-num').textContent = (cur + 1) + ' / ' + total;
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === total - 1;
+    document.getElementById('progress-bar').style.width = ((cur + 1) / total * 100) + '%';
+  }
+
+  function go(dir) { goTo(cur + dir); }
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[cur].classList.add('exit');
+    setTimeout(() => slides[cur < n ? cur : cur].classList.remove('exit'), 300);
+    cur = n;
+    update();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+  });
+
+  update();
+</script>
+</body>
+</html>
