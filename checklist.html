@@ -400,13 +400,13 @@
       </div>
     </div>
 
-    <div class="item" id="item-8" onclick="toggleItem(8)">
+    <div class="item warn" id="item-8" onclick="toggleItem(8)">
       <div class="item-header">
         <div class="item-check" onclick="toggleCheck(event,8)"><span class="check-icon">✓</span></div>
         <div class="item-num">09</div>
         <div class="item-main">
-          <div class="item-title">Create a Meta Pixel for Stündenglass</div>
-          <div class="item-subtitle">Events Manager → a unique tracking ID for the stundenglass.com website</div>
+          <div class="item-title">Check how the agency's pixel is currently installed <span class="tag warn">Do First</span></div>
+          <div class="item-subtitle">Shopify only allows one Facebook &amp; Instagram channel — you need to know what's already there</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
@@ -414,11 +414,12 @@
         <div class="detail-inner">
           <h4>Step by Step</h4>
           <div class="steps">
-            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → grid menu (⊞) → <strong>"Events Manager"</strong></div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-body">Click the green <strong>"+ Connect data sources"</strong> button → select <strong>"Web"</strong> → click <strong>"Connect"</strong></div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-body">Name it <code>Stündenglass Website Pixel</code> → enter <code>stundenglass.com</code> as the website URL → click <strong>"Create pixel"</strong></div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-body">You'll see a <strong>Pixel ID</strong> — a 15-digit number. Copy it and save it somewhere. You'll need it in the next step.</div></div>
+            <div class="step"><div class="step-n">1</div><div class="step-body">Log into Shopify Admin for stundenglass.myshopify.com → look in the left sidebar under <strong>Sales channels</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">If you see <strong>"Facebook &amp; Instagram"</strong> listed — click it → click <strong>"Settings"</strong> → note the Business Manager name shown. This is the agency's account.</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Do not disconnect it.</strong> The agency's pixel needs to keep running while they're still managing your ads. You will install your new pixel a different way (next step).</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Repeat the same check on grencoscience.myshopify.com</div></div>
           </div>
+          <div class="detail-note red"><strong>Important:</strong> Shopify's Facebook &amp; Instagram sales channel can only connect to one Business Manager at a time. You cannot add a second channel. Your new pixel must be installed through a different method — see the next two steps.</div>
         </div>
       </div>
     </div>
@@ -428,23 +429,32 @@
         <div class="item-check" onclick="toggleCheck(event,9)"><span class="check-icon">✓</span></div>
         <div class="item-num">10</div>
         <div class="item-main">
-          <div class="item-title">Install the Pixel on stundenglass.com via Shopify</div>
-          <div class="item-subtitle">Shopify has a native Meta integration — no code required</div>
+          <div class="item-title">Create a Meta Pixel for Stündenglass and install via Shopify Customer Events <span class="tag tip">Runs Alongside Agency</span></div>
+          <div class="item-subtitle">Shopify Customer Events allows multiple pixels — your pixel and the agency's pixel fire at the same time</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
       <div class="item-detail">
         <div class="detail-inner">
-          <h4>Step by Step</h4>
+          <h4>Part 1 — Create the Pixel in Meta (5 min)</h4>
           <div class="steps">
-            <div class="step"><div class="step-n">1</div><div class="step-body">Log into <strong>Shopify Admin</strong> for stundenglass.myshopify.com</div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-body">Left sidebar → <strong>Sales channels</strong> → click <strong>"+"</strong> next to Sales channels → search for and add <strong>"Facebook &amp; Instagram"</strong></div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-body">Click <strong>"Set up"</strong> → <strong>"Connect account"</strong> → log in with the Facebook account that owns your Business Manager</div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-body">Follow the setup wizard. When it asks which <strong>Pixel</strong> to connect, select the <code>Stündenglass Website Pixel</code> you just created</div></div>
-            <div class="step"><div class="step-n">5</div><div class="step-body">Enable <strong>Conversions API</strong> when prompted — this gives you server-side tracking that works even when browsers block the pixel (iOS 14+ protection). Shopify handles all the technical setup automatically.</div></div>
-            <div class="step"><div class="step-n">6</div><div class="step-body">Complete the setup and confirm the pixel status shows <strong>"Active"</strong> in Events Manager</div></div>
+            <div class="step"><div class="step-n">1</div><div class="step-body">In your new Business Manager → grid menu (⊞) → <strong>"Events Manager"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"+ Connect data sources"</strong> → <strong>"Web"</strong> → <strong>"Connect"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Name it <code>Stündenglass Website Pixel</code> → click <strong>"Create pixel"</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">When asked how to install it, choose <strong>"Install code manually"</strong> → copy the full pixel base code snippet (it starts with <code>&lt;!-- Meta Pixel Code --&gt;</code>)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Note your <strong>Pixel ID</strong> — a 15-digit number. Save it.</div></div>
           </div>
-          <div class="detail-note green"><strong>Shopify does the hard part.</strong> The Shopify-Meta integration automatically installs the pixel AND the Conversions API server-side tracking — no developer needed. This is what gives you reliable purchase data even on iPhones.</div>
+          <h4 style="margin-top:14px;">Part 2 — Install via Shopify Customer Events (5 min, no code needed)</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">6</div><div class="step-body">In Shopify Admin → click <strong>"Settings"</strong> (bottom left gear icon) → <strong>"Customer events"</strong></div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-body">Click <strong>"Add custom pixel"</strong></div></div>
+            <div class="step"><div class="step-n">8</div><div class="step-body">Name it <code>Grenco Labs Meta Pixel — Stündenglass</code></div></div>
+            <div class="step"><div class="step-n">9</div><div class="step-body">In the code box, paste the full Meta pixel base code you copied in step 4 above</div></div>
+            <div class="step"><div class="step-n">10</div><div class="step-body">Click <strong>"Save"</strong> → then click <strong>"Connect"</strong> to activate it</div></div>
+            <div class="step"><div class="step-n">11</div><div class="step-body">Confirm the pixel status shows <strong>"Connected"</strong> in the Customer Events list</div></div>
+          </div>
+          <div class="detail-note green"><strong>This is the correct method when running parallel to an agency.</strong> Shopify Customer Events supports multiple pixels firing simultaneously. The agency's pixel (in the Facebook &amp; Instagram channel) and your new pixel (in Customer Events) will both fire on every page and every purchase — with no conflict.</div>
+          <div class="detail-note" style="margin-top:8px;"><strong>About Conversions API:</strong> The agency's Shopify channel integration handles server-side tracking for their pixel. For your new pixel, the browser-side Customer Events pixel is enough for the parallel run period. Once you fully take over, reconnect via the Facebook &amp; Instagram channel properly to get full Conversions API coverage.</div>
         </div>
       </div>
     </div>
@@ -455,7 +465,7 @@
         <div class="item-num">11</div>
         <div class="item-main">
           <div class="item-title">Repeat Pixel setup for G Pen on grencoscience.myshopify.com</div>
-          <div class="item-subtitle">Create a separate pixel — one pixel per website, never mix them</div>
+          <div class="item-subtitle">Same Customer Events method — one pixel per website in your new Business Manager</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
@@ -463,10 +473,10 @@
         <div class="detail-inner">
           <h4>Step by Step</h4>
           <div class="steps">
-            <div class="step"><div class="step-n">1</div><div class="step-body">In Meta Events Manager → <strong>"+ Connect data sources"</strong> → <strong>"Web"</strong> → name it <code>G Pen Website Pixel</code></div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-body">Log into <strong>grencoscience.myshopify.com</strong> Shopify Admin</div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-body">Sales channels → <strong>Facebook &amp; Instagram</strong> → connect and select the <code>G Pen Website Pixel</code></div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-body">Enable Conversions API. Confirm pixel shows <strong>"Active"</strong>.</div></div>
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Meta Events Manager → <strong>"+ Connect data sources"</strong> → <strong>"Web"</strong> → name it <code>G Pen Website Pixel</code> → <strong>"Install code manually"</strong> → copy the pixel code</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">In grencoscience.myshopify.com Shopify Admin → <strong>Settings → Customer events → Add custom pixel</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Name it <code>Grenco Labs Meta Pixel — G Pen</code> → paste the pixel code → Save → Connect</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Confirm status shows <strong>"Connected"</strong></div></div>
           </div>
         </div>
       </div>
@@ -477,8 +487,8 @@
         <div class="item-check" onclick="toggleCheck(event,11)"><span class="check-icon">✓</span></div>
         <div class="item-num">12</div>
         <div class="item-main">
-          <div class="item-title">Test that the pixel is firing correctly on both sites <span class="tag tip">Verify</span></div>
-          <div class="item-subtitle">Use Meta's free Pixel Helper browser extension to confirm purchases are being tracked</div>
+          <div class="item-title">Test that your new pixel is firing correctly on both sites <span class="tag tip">Verify</span></div>
+          <div class="item-subtitle">Confirm your pixel fires alongside the agency's — both should show in Pixel Helper at the same time</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
@@ -486,14 +496,15 @@
         <div class="detail-inner">
           <h4>Step by Step</h4>
           <div class="steps">
-            <div class="step"><div class="step-n">1</div><div class="step-body">In Chrome, search for and install <strong>"Meta Pixel Helper"</strong> — it's a free Chrome browser extension from Meta</div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-body">Visit stundenglass.com — the Pixel Helper icon should light up and show <strong>"PageView"</strong> fired</div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-body">Add a product to the cart — the helper should show <strong>"AddToCart"</strong> fired</div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-body">Place a real test order (use a $1 test product or immediately refund it) — confirm <strong>"Purchase"</strong> event fires</div></div>
-            <div class="step"><div class="step-n">5</div><div class="step-body">Repeat the same check on grencoscience.com</div></div>
-            <div class="step"><div class="step-n">6</div><div class="step-body">In Meta Events Manager, you should see the test events appear under <strong>"Test events"</strong> within 5 minutes</div></div>
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Chrome, install <strong>"Meta Pixel Helper"</strong> — free extension from Meta. Search it in the Chrome Web Store.</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Visit stundenglass.com — click the Pixel Helper icon. You should see <strong>two pixels listed</strong>: the agency's pixel ID and your new Grenco Labs pixel ID. Both should show <strong>"PageView"</strong> fired. This is correct and expected.</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Add a product to the cart — both pixels should show <strong>"AddToCart"</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Place a test order — confirm both pixels show <strong>"Purchase"</strong> event firing. This means both ad accounts will track this purchase. That's intentional during the parallel run.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">In your Meta Events Manager → <strong>"Test events"</strong> — you should see the Purchase appear under your new pixel ID within 5 minutes</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat the check on grencoscience.com</div></div>
           </div>
-          <div class="detail-note red"><strong>Don't skip this step.</strong> If the Purchase event isn't firing, Meta can't optimize for buyers and your ROAS will be terrible. Verify before spending a dollar on ads.</div>
+          <div class="detail-note red"><strong>Don't skip this.</strong> If your new pixel's Purchase event isn't firing, Meta can't optimize your campaigns for buyers. Verify before spending anything.</div>
+          <div class="detail-note" style="margin-top:8px;"><strong>Seeing two pixels is normal and correct.</strong> During the parallel run period, both the agency's pixel and your pixel will claim every purchase. Meta's native ROAS numbers in both accounts will look inflated. Ignore native Meta ROAS during this period — use Triple Whale as the only source of truth for comparing performance.</div>
         </div>
       </div>
     </div>
@@ -1077,7 +1088,7 @@
         <div class="item-num">33</div>
         <div class="item-main">
           <div class="item-title">Increase new account budgets to match the agency — run parallel for 7 days</div>
-          <div class="item-subtitle">Same daily spend on both sets of accounts — true apples-to-apples comparison</div>
+          <div class="item-subtitle">Same daily spend on both sets of accounts — true apples-to-apples comparison in Triple Whale</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
@@ -1091,6 +1102,7 @@
             <div class="step"><div class="step-n">4</div><div class="step-body">Run both for exactly 7 days. Note the start date.</div></div>
           </div>
           <div class="detail-note"><strong>Yes, you'll be spending 2× on ads for 7 days.</strong> At ~$600/day per brand, that's an extra ~$8,400 total. Think of it as the cost of a clean, risk-free transition. Much cheaper than having revenue drop during a cold switch.</div>
+          <div class="detail-note red" style="margin-top:8px;"><strong>During the parallel run, ignore ROAS numbers inside Meta's native Ads Manager.</strong> Both ad accounts will claim the same purchases (because both pixels are firing). Meta's native ROAS will be inflated for both accounts. Only use Triple Whale for the comparison — it correctly de-duplicates and attributes each order to its true source.</div>
         </div>
       </div>
     </div>
@@ -1100,8 +1112,8 @@
         <div class="item-check" onclick="toggleCheck(event,33)"><span class="check-icon">✓</span></div>
         <div class="item-num">34</div>
         <div class="item-main">
-          <div class="item-title">Compare ROAS daily in Triple Whale — use source-level attribution</div>
-          <div class="item-subtitle">Triple Whale can show you ROAS by ad account — confirm new accounts are within 10–20% of agency</div>
+          <div class="item-title">Compare ROAS daily in Triple Whale — this is your only reliable source during parallel run</div>
+          <div class="item-subtitle">TW de-duplicates attribution across both accounts — agency ROAS vs. your ROAS side-by-side</div>
         </div>
         <div class="item-expand">▾</div>
       </div>
@@ -1111,7 +1123,7 @@
           <div class="steps">
             <div class="step"><div class="step-n">1</div><div class="step-body">In Triple Whale → go to the <strong>Ads</strong> or <strong>Attribution</strong> section</div></div>
             <div class="step"><div class="step-n">2</div><div class="step-body">Filter by <strong>Meta/Facebook</strong> as the channel → break down by <strong>ad account</strong> or <strong>campaign</strong></div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-body">Each morning, note: new account ROAS vs. agency account ROAS for the prior day</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Each morning, note: new account ROAS vs. agency account ROAS for the prior day. Triple Whale assigns each sale to one source — these numbers won't double-count.</div></div>
             <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Decision threshold:</strong> if new account ROAS is within 10–20% of agency ROAS for <strong>5 consecutive days</strong> → you're ready to give notice</div></div>
           </div>
           <div class="detail-note"><strong>Expect the new account to start lower</strong> in days 1–3. The ML algorithm is learning. Day 4–7 is when it typically stabilizes. If ROAS is still more than 30% below agency by day 7, extend the parallel run for another week before giving notice.</div>
@@ -1185,10 +1197,12 @@
             <div class="step"><div class="step-n">1</div><div class="step-body">On the termination date, increase new account daily budgets from parallel-run levels to the full target (e.g., $600/day Stündenglass + $500/day G Pen)</div></div>
             <div class="step"><div class="step-n">2</div><div class="step-body">Confirm agency campaigns are paused/removed from their side</div></div>
             <div class="step"><div class="step-n">3</div><div class="step-body">Remove agency from your Business Manager: <strong>Business Settings → People → remove agency team members</strong></div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-body">Monitor closely for 72 hours — first days at full budget on new accounts are the most important to watch</div></div>
-            <div class="step"><div class="step-n">5</div><div class="step-body">🎉 <strong>You're running your own Meta ads.</strong> Daily Claude review from here.</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Pixel cleanup — do this on termination day:</strong> In Shopify Admin → Sales channels → Facebook &amp; Instagram → disconnect the agency's account. Then reconnect it using your own Grenco Labs Business Manager. This gives you full Conversions API (server-side) tracking again. Also remove the Customer Events pixel you installed — you no longer need it since the channel integration replaces it.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Re-verify the pixel is working correctly using the Pixel Helper extension — you should now see only <strong>one</strong> pixel firing (yours)</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Monitor closely for 72 hours — first days at full budget on new accounts are the most important to watch</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-body">🎉 <strong>You're running your own Meta ads.</strong> Daily Claude review from here.</div></div>
           </div>
-          <div class="detail-note green"><strong>You made it.</strong> From this point, the daily workflow is: morning Claude review → approve/reject recommendations → 15 minutes done. No more agency fees. No more waiting for weekly reports.</div>
+          <div class="detail-note green"><strong>You made it.</strong> From this point: one pixel, one Business Manager, full Conversions API, Claude doing the daily optimization. No more agency fees. No more waiting for weekly reports.</div>
         </div>
       </div>
     </div>
