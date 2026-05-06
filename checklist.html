@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grenco Labs — Meta Ads Launch Checklist</title>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: rgba(201,168,76,0.12);
+    --gold-border: rgba(201,168,76,0.3);
+    --bg: #080808;
+    --bg2: #111;
+    --bg3: #181818;
+    --bg4: #222;
+    --text: #f0f0f0;
+    --text-dim: #777;
+    --text-mid: #aaa;
+    --border: rgba(255,255,255,0.07);
+    --red: #e05252;
+    --green: #52c97e;
+    --blue: #5299c9;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden; }
+
+  /* ── TOP PROGRESS BAR ── */
+  #top-bar { position:sticky; top:0; z-index:100; background:rgba(8,8,8,0.96); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; gap:24px; }
+  #top-bar h1 { font-size:15px; font-weight:700; letter-spacing:-0.01em; white-space:nowrap; }
+  #top-bar h1 span { color:var(--gold); }
+  .progress-wrap { flex:1; display:flex; align-items:center; gap:12px; }
+  .progress-track { flex:1; height:6px; background:var(--bg3); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:100px; transition:width 0.4s ease; }
+  #progress-text { font-size:12px; color:var(--text-dim); white-space:nowrap; letter-spacing:0.05em; min-width:60px; text-align:right; }
+  .reset-btn { font-size:11px; color:var(--text-dim); background:none; border:1px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .reset-btn:hover { color:var(--text); border-color:rgba(255,255,255,0.2); }
+
+  /* ── LAYOUT ── */
+  .container { max-width:860px; margin:0 auto; padding:40px 32px 80px; }
+
+  /* ── COMPLIANCE BANNER ── */
+  .compliance-banner { background:rgba(201,168,76,0.08); border:1px solid var(--gold-border); border-radius:14px; padding:20px 24px; margin-bottom:40px; }
+  .compliance-banner .banner-title { display:flex; align-items:center; gap:10px; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .compliance-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px; }
+  .compliance-col h4 { font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+  .compliance-col.do h4 { color:var(--green); }
+  .compliance-col.dont h4 { color:var(--red); }
+  .compliance-col ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+  .compliance-col ul li { font-size:12.5px; color:var(--text-mid); padding-left:14px; position:relative; line-height:1.45; }
+  .compliance-col.do ul li::before { content:'✓'; position:absolute; left:0; color:var(--green); font-weight:700; font-size:11px; }
+  .compliance-col.dont ul li::before { content:'✗'; position:absolute; left:0; color:var(--red); font-weight:700; font-size:11px; }
+
+  /* ── PHASE HEADER ── */
+  .phase { margin-bottom:40px; }
+  .phase-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .phase-badge { font-size:10px; font-weight:800; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); background:var(--gold-dim); border:1px solid var(--gold-border); border-radius:6px; padding:4px 10px; white-space:nowrap; }
+  .phase-title { font-size:20px; font-weight:700; letter-spacing:-0.01em; flex:1; }
+  .phase-meta { font-size:12px; color:var(--text-dim); white-space:nowrap; }
+  .phase-progress-wrap { display:flex; align-items:center; gap:8px; }
+  .phase-track { width:80px; height:4px; background:var(--bg3); border-radius:100px; overflow:hidden; }
+  .phase-fill { height:100%; background:var(--gold); border-radius:100px; transition:width 0.4s ease; }
+  .phase-count { font-size:11px; color:var(--text-dim); white-space:nowrap; }
+
+  /* ── CHECKLIST ITEM ── */
+  .item { background:var(--bg2); border:1px solid var(--border); border-radius:12px; margin-bottom:8px; transition:border-color 0.2s; overflow:hidden; }
+  .item.done { border-color:rgba(82,201,126,0.25); background:rgba(82,201,126,0.04); }
+  .item.warn { border-color:rgba(201,168,76,0.25); }
+
+  .item-header { display:flex; align-items:flex-start; gap:14px; padding:16px 18px; cursor:pointer; user-select:none; }
+  .item-header:hover { background:rgba(255,255,255,0.02); }
+
+  .item-check { width:22px; height:22px; border-radius:6px; border:2px solid var(--border); background:var(--bg3); flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:1px; transition:all 0.2s; cursor:pointer; }
+  .item.done .item-check { background:var(--green); border-color:var(--green); }
+  .check-icon { display:none; color:#000; font-size:13px; font-weight:900; line-height:1; }
+  .item.done .check-icon { display:block; }
+
+  .item-num { font-size:11px; font-weight:700; color:var(--text-dim); background:var(--bg3); border:1px solid var(--border); border-radius:5px; padding:2px 7px; flex-shrink:0; margin-top:2px; min-width:30px; text-align:center; }
+  .item.done .item-num { color:var(--green); border-color:rgba(82,201,126,0.3); background:rgba(82,201,126,0.08); }
+
+  .item-main { flex:1; min-width:0; }
+  .item-title { font-size:15px; font-weight:600; line-height:1.3; margin-bottom:3px; }
+  .item.done .item-title { color:var(--text-mid); text-decoration:line-through; text-decoration-color:rgba(82,201,126,0.4); }
+  .item-subtitle { font-size:12px; color:var(--text-dim); }
+
+  .item-expand { font-size:16px; color:var(--text-dim); flex-shrink:0; transition:transform 0.2s; margin-top:2px; }
+  .item.open .item-expand { transform:rotate(180deg); }
+
+  /* ── DETAIL PANEL ── */
+  .item-detail { display:none; padding:0 18px 18px 54px; }
+  .item.open .item-detail { display:block; }
+
+  .detail-inner { background:var(--bg3); border-radius:10px; padding:16px; border:1px solid var(--border); }
+  .detail-inner h4 { font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+  .steps { display:flex; flex-direction:column; gap:8px; }
+  .step { display:flex; gap:10px; align-items:flex-start; }
+  .step-n { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-dim); border:1px solid var(--gold-border); border-radius:4px; padding:2px 6px; flex-shrink:0; min-width:24px; text-align:center; margin-top:1px; }
+  .step-body { font-size:13px; color:var(--text-mid); line-height:1.55; }
+  .step-body strong { color:var(--text); font-weight:600; }
+  .step-body code { background:var(--bg4); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-family:monospace; font-size:12px; color:var(--gold); }
+  .step-body a { color:#60a5fa; text-decoration:none; }
+  .step-body a:hover { text-decoration:underline; }
+
+  .detail-note { background:rgba(201,168,76,0.06); border:1px solid var(--gold-border); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--text-mid); line-height:1.5; margin-top:12px; }
+  .detail-note strong { color:var(--gold); }
+  .detail-note.red { background:rgba(224,82,82,0.06); border-color:rgba(224,82,82,0.3); }
+  .detail-note.red strong { color:var(--red); }
+  .detail-note.green { background:rgba(82,201,126,0.06); border-color:rgba(82,201,126,0.3); }
+  .detail-note.green strong { color:var(--green); }
+
+  /* ── COMPLETION ── */
+  #completion { display:none; text-align:center; padding:60px 32px; }
+  #completion h2 { font-size:36px; font-weight:800; color:var(--gold); margin-bottom:12px; }
+  #completion p { font-size:16px; color:var(--text-mid); }
+
+  /* ── MISC ── */
+  .section-intro { font-size:14px; color:var(--text-mid); line-height:1.6; margin-bottom:20px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .tag { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:2px 7px; border-radius:4px; margin-left:6px; vertical-align:middle; }
+  .tag.warn { background:rgba(201,168,76,0.15); color:var(--gold); border:1px solid var(--gold-border); }
+  .tag.critical { background:rgba(224,82,82,0.15); color:var(--red); border:1px solid rgba(224,82,82,0.3); }
+  .tag.tip { background:rgba(82,153,201,0.15); color:var(--blue); border:1px solid rgba(82,153,201,0.3); }
+
+  @media (max-width:600px) {
+    .container { padding:24px 16px 60px; }
+    #top-bar { padding:12px 16px; gap:12px; }
+    .compliance-grid { grid-template-columns:1fr; }
+    .item-detail { padding-left:18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="top-bar">
+  <h1>Grenco Labs · <span>Meta Ads Launch</span></h1>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="global-fill" style="width:0%"></div></div>
+    <div id="progress-text">0 / 37</div>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">Reset All</button>
+</div>
+
+<div class="container">
+
+  <!-- COMPLIANCE BANNER -->
+  <div class="compliance-banner">
+    <div class="banner-title">⚠ Read This First — Compliance Rules for This Product Category</div>
+    <p style="font-size:13px;color:var(--text-mid);line-height:1.55;">Stündenglass and G Pen products are in a restricted category on Meta. The agency stays approved by framing ads as <strong style="color:var(--text);">design objects and lifestyle products</strong> — not smoking accessories. Every piece of ad copy and every product title must follow these rules, or the account will be flagged.</p>
+    <div class="compliance-grid" style="margin-top:14px;">
+      <div class="compliance-col do">
+        <h4>✓ Always Do This</h4>
+        <ul>
+          <li>Ad account category: <strong style="color:var(--text);">Home Decor &amp; Design</strong> or <strong style="color:var(--text);">Art &amp; Collectibles</strong></li>
+          <li>Product titles: "360° Gravity Infuser — Limited Edition" / "Precision Borosilicate Glass Device"</li>
+          <li>Ad copy: focus on design, engineering, craftsmanship, and collaboration story</li>
+          <li>Visuals: product beauty shots, unboxing, collab branding, lifestyle (no use shown)</li>
+          <li>Landing pages: open with product imagery and specs — not cannabis or smoke language</li>
+        </ul>
+      </div>
+      <div class="compliance-col dont">
+        <h4>✗ Never Do This</h4>
+        <ul>
+          <li>Never use words: cannabis, weed, smoke, smoking, bong, hookah, hit, rip, sesh, 420 (in ad copy)</li>
+          <li>Never show anyone using the product to smoke in ad creative</li>
+          <li>Never categorize ad accounts under tobacco, smoking, or vaping</li>
+          <li>Never run ads that link to a page with cannabis-explicit language above the fold</li>
+          <li>Never use emojis that imply cannabis use (🌿💨🍃) in ad copy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase" id="phase-0">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 1</div>
+      <div class="phase-title">Business Manager Setup</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-0" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-0">0 / 7</div>
+      </div>
+      <div class="phase-meta">Week 1 · Days 1–2</div>
+    </div>
+    <div class="section-intro">This is the foundation everything else is built on. Meta Business Manager is the control center — it holds your ad accounts, pages, pixels, and billing. You need to do this before you can run a single ad. Takes about 2–3 hours total.</div>
+
+    <div class="item warn" id="item-0" onclick="toggleItem(0)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,0)"><span class="check-icon">✓</span></div>
+        <div class="item-num">01</div>
+        <div class="item-main">
+          <div class="item-title">Create a Meta Business Manager account <span class="tag warn">Start Here</span></div>
+          <div class="item-subtitle">business.facebook.com — use a company email address, not a personal one</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Open a browser and go to <strong>business.facebook.com</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click the blue <strong>"Create account"</strong> button in the top right corner</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Enter <strong>Business name:</strong> <code>Grenco Labs</code> (or your legal entity name)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Enter your <strong>name</strong> and a <strong>company email address</strong> (e.g. tim@grencolab.com — do NOT use a personal Gmail)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Check your email inbox for a verification email from Meta and click <strong>"Confirm"</strong></div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">You'll land on the Business Manager dashboard. This is your home base for everything that follows.</div></div>
+          </div>
+          <div class="detail-note"><strong>Why a company email?</strong> If someone leaves the company, you don't want the account tied to their personal inbox. Business Manager should belong to the company, not an individual.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-1" onclick="toggleItem(1)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,1)"><span class="check-icon">✓</span></div>
+        <div class="item-num">02</div>
+        <div class="item-main">
+          <div class="item-title">Create a Facebook Business Page for Stündenglass</div>
+          <div class="item-subtitle">This is the public brand page ads will run "from" — not a personal profile</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager, click the <strong>grid icon (⊞)</strong> in the top left to open the main menu, then click <strong>"Pages"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click the blue <strong>"Add"</strong> button → select <strong>"Create a new Page"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Page name:</strong> <code>Stündenglass</code> — use the exact brand name with the umlaut (ü)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Category:</strong> Type "Home Decor" and select it. Do NOT select anything related to tobacco, smoking, or vaping.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Upload the brand logo as the profile photo and a lifestyle/product image as the cover photo</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Click <strong>"Create Page"</strong> — the page is now live and connected to your Business Manager</div></div>
+          </div>
+          <div class="detail-note red"><strong>Important:</strong> This page is mostly a technical requirement for running ads — it doesn't need to be a fully active page with daily posts. Just make sure it looks professional and has the correct logo/cover image.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-2" onclick="toggleItem(2)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,2)"><span class="check-icon">✓</span></div>
+        <div class="item-num">03</div>
+        <div class="item-main">
+          <div class="item-title">Create a Facebook Business Page for G Pen (Grenco Science)</div>
+          <div class="item-subtitle">Same process as above — one page per brand</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → <strong>Pages</strong> → <strong>Add</strong> → <strong>"Create a new Page"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Page name:</strong> <code>G Pen</code> or <code>G Pen by Grenco</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Category:</strong> <code>Home Decor</code> or <code>Electronics</code> — NOT tobacco/vaping</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Upload G Pen brand logo as profile photo, product/lifestyle image as cover</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Click <strong>"Create Page"</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-3" onclick="toggleItem(3)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,3)"><span class="check-icon">✓</span></div>
+        <div class="item-num">04</div>
+        <div class="item-main">
+          <div class="item-title">Connect Stündenglass and G Pen Instagram accounts</div>
+          <div class="item-subtitle">Allows ads to run on Instagram — same ad, more placements</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → click the grid menu (⊞) → <strong>"Instagram accounts"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"Add"</strong> → <strong>"Connect your Instagram account"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Log in with the <strong>@stundenglass</strong> Instagram credentials when prompted</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Repeat the process to connect the <strong>G Pen</strong> Instagram account</div></div>
+          </div>
+          <div class="detail-note"><strong>You'll need the Instagram username and password</strong> for each brand account to complete this step. Have them ready before you start.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-4" onclick="toggleItem(4)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,4)"><span class="check-icon">✓</span></div>
+        <div class="item-num">05</div>
+        <div class="item-main">
+          <div class="item-title">Create 3 ad accounts for Stündenglass (1 primary + 2 backups) <span class="tag critical">Critical</span></div>
+          <div class="item-subtitle">Backups protect you if the primary account gets flagged — always have spares</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → grid menu (⊞) → <strong>"Ad accounts"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"Add"</strong> → <strong>"Create a new ad account"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Ad account name:</strong> <code>Stündenglass — Primary</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Currency:</strong> USD · <strong>Time zone:</strong> your business time zone</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Click <strong>"Create"</strong> — then immediately repeat this process two more times to create <code>Stündenglass — Backup 1</code> and <code>Stündenglass — Backup 2</code></div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Add yourself and any team members as <strong>Admins</strong> on all three accounts</div></div>
+          </div>
+          <div class="detail-note red"><strong>Account category:</strong> When asked, select <strong>"Home Decor &amp; Design"</strong> or <strong>"Art &amp; Collectibles."</strong> Never select tobacco, smoking, or vaping-related categories.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-5" onclick="toggleItem(5)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,5)"><span class="check-icon">✓</span></div>
+        <div class="item-num">06</div>
+        <div class="item-main">
+          <div class="item-title">Create 3 ad accounts for G Pen (1 primary + 2 backups)</div>
+          <div class="item-subtitle">Same as above — one complete set of accounts per brand</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → <strong>Ad accounts</strong> → <strong>Add</strong> → <strong>"Create a new ad account"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Create: <code>G Pen — Primary</code>, then <code>G Pen — Backup 1</code>, then <code>G Pen — Backup 2</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Category: <strong>Home Decor &amp; Design</strong> or <strong>Consumer Electronics</strong></div></div>
+          </div>
+          <div class="detail-note green"><strong>You now have 6 ad accounts total</strong> across both brands. This is intentional — it ensures you always have a live backup account ready if Meta restricts the primary.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-6" onclick="toggleItem(6)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,6)"><span class="check-icon">✓</span></div>
+        <div class="item-num">07</div>
+        <div class="item-main">
+          <div class="item-title">Add a payment method to all 6 ad accounts</div>
+          <div class="item-subtitle">Each account needs its own credit card on file — accounts with no payment method can't spend</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Switch into each ad account one at a time. In the top left, click the account name dropdown and select an account.</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Go to the grid menu (⊞) → <strong>"Billing"</strong> (or navigate to <strong>Ads Manager → Billing &amp; Payment methods</strong>)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Click <strong>"Add payment method"</strong> → enter a credit or debit card number</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Repeat for all 6 accounts. You can use the same card across multiple accounts.</div></div>
+          </div>
+          <div class="detail-note"><strong>Pro tip:</strong> Use a dedicated business card that won't hit personal credit limits. Meta charges the card in real-time as spend accumulates — at $600/day that's roughly $18K/month per account.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 1 -->
+
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase" id="phase-1">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 2</div>
+      <div class="phase-title">Pixel &amp; Domain Setup</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-1" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-1">0 / 5</div>
+      </div>
+      <div class="phase-meta">Week 1 · Days 3–4</div>
+    </div>
+    <div class="section-intro">The Meta Pixel is a small piece of code that lives on your website and tells Meta when someone buys something, adds to cart, or visits a product page. Without it, Meta can't optimize your ads to find people who are likely to buy. This is non-negotiable — your whole ROAS depends on it.</div>
+
+    <div class="item" id="item-7" onclick="toggleItem(7)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,7)"><span class="check-icon">✓</span></div>
+        <div class="item-num">08</div>
+        <div class="item-main">
+          <div class="item-title">Verify your domains in Business Manager <span class="tag warn">Do First</span></div>
+          <div class="item-subtitle">Meta requires you to prove you own stundenglass.com and grencoscience.com before ads can run</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → grid menu (⊞) → <strong>"Brand safety"</strong> → <strong>"Domains"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"Add"</strong> → type <code>stundenglass.com</code> → click <strong>"Add domain"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Meta will give you a <strong>DNS TXT record</strong> (a short code like <code>facebook-domain-verification=abc123</code>). Copy this code.</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Log into your domain registrar (wherever stundenglass.com is registered — likely GoDaddy, Cloudflare, or similar). Add the TXT record to your DNS settings.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Back in Meta → click <strong>"Verify domain"</strong>. DNS changes can take up to 24 hours to propagate — if it fails, wait an hour and try again.</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat the same process for <code>grencoscience.com</code></div></div>
+          </div>
+          <div class="detail-note"><strong>Need IT help?</strong> The DNS step requires access to the domain's DNS settings. If someone else manages the domains, send them the TXT record and ask them to add it — then you verify on the Meta side.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-8" onclick="toggleItem(8)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,8)"><span class="check-icon">✓</span></div>
+        <div class="item-num">09</div>
+        <div class="item-main">
+          <div class="item-title">Create a Meta Pixel for Stündenglass</div>
+          <div class="item-subtitle">Events Manager → a unique tracking ID for the stundenglass.com website</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → grid menu (⊞) → <strong>"Events Manager"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click the green <strong>"+ Connect data sources"</strong> button → select <strong>"Web"</strong> → click <strong>"Connect"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Name it <code>Stündenglass Website Pixel</code> → enter <code>stundenglass.com</code> as the website URL → click <strong>"Create pixel"</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">You'll see a <strong>Pixel ID</strong> — a 15-digit number. Copy it and save it somewhere. You'll need it in the next step.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-9" onclick="toggleItem(9)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,9)"><span class="check-icon">✓</span></div>
+        <div class="item-num">10</div>
+        <div class="item-main">
+          <div class="item-title">Install the Pixel on stundenglass.com via Shopify</div>
+          <div class="item-subtitle">Shopify has a native Meta integration — no code required</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Log into <strong>Shopify Admin</strong> for stundenglass.myshopify.com</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Left sidebar → <strong>Sales channels</strong> → click <strong>"+"</strong> next to Sales channels → search for and add <strong>"Facebook &amp; Instagram"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Click <strong>"Set up"</strong> → <strong>"Connect account"</strong> → log in with the Facebook account that owns your Business Manager</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Follow the setup wizard. When it asks which <strong>Pixel</strong> to connect, select the <code>Stündenglass Website Pixel</code> you just created</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Enable <strong>Conversions API</strong> when prompted — this gives you server-side tracking that works even when browsers block the pixel (iOS 14+ protection). Shopify handles all the technical setup automatically.</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Complete the setup and confirm the pixel status shows <strong>"Active"</strong> in Events Manager</div></div>
+          </div>
+          <div class="detail-note green"><strong>Shopify does the hard part.</strong> The Shopify-Meta integration automatically installs the pixel AND the Conversions API server-side tracking — no developer needed. This is what gives you reliable purchase data even on iPhones.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-10" onclick="toggleItem(10)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,10)"><span class="check-icon">✓</span></div>
+        <div class="item-num">11</div>
+        <div class="item-main">
+          <div class="item-title">Repeat Pixel setup for G Pen on grencoscience.myshopify.com</div>
+          <div class="item-subtitle">Create a separate pixel — one pixel per website, never mix them</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Meta Events Manager → <strong>"+ Connect data sources"</strong> → <strong>"Web"</strong> → name it <code>G Pen Website Pixel</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Log into <strong>grencoscience.myshopify.com</strong> Shopify Admin</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Sales channels → <strong>Facebook &amp; Instagram</strong> → connect and select the <code>G Pen Website Pixel</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Enable Conversions API. Confirm pixel shows <strong>"Active"</strong>.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-11" onclick="toggleItem(11)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,11)"><span class="check-icon">✓</span></div>
+        <div class="item-num">12</div>
+        <div class="item-main">
+          <div class="item-title">Test that the pixel is firing correctly on both sites <span class="tag tip">Verify</span></div>
+          <div class="item-subtitle">Use Meta's free Pixel Helper browser extension to confirm purchases are being tracked</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Chrome, search for and install <strong>"Meta Pixel Helper"</strong> — it's a free Chrome browser extension from Meta</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Visit stundenglass.com — the Pixel Helper icon should light up and show <strong>"PageView"</strong> fired</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Add a product to the cart — the helper should show <strong>"AddToCart"</strong> fired</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Place a real test order (use a $1 test product or immediately refund it) — confirm <strong>"Purchase"</strong> event fires</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Repeat the same check on grencoscience.com</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">In Meta Events Manager, you should see the test events appear under <strong>"Test events"</strong> within 5 minutes</div></div>
+          </div>
+          <div class="detail-note red"><strong>Don't skip this step.</strong> If the Purchase event isn't firing, Meta can't optimize for buyers and your ROAS will be terrible. Verify before spending a dollar on ads.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 2 -->
+
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase" id="phase-2">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 3</div>
+      <div class="phase-title">Product Catalog Setup</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-2" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-2">0 / 5</div>
+      </div>
+      <div class="phase-meta">Week 1 · Days 4–5</div>
+    </div>
+    <div class="section-intro">A product catalog is a list of all your products uploaded to Meta — prices, images, descriptions, links. Catalog ads (the kind the agency runs) pull directly from this list to automatically show the right product to the right person. This is the format with the highest approval rate for this product category.</div>
+
+    <div class="item" id="item-12" onclick="toggleItem(12)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,12)"><span class="check-icon">✓</span></div>
+        <div class="item-num">13</div>
+        <div class="item-main">
+          <div class="item-title">Open Meta Commerce Manager and create a catalog for Stündenglass</div>
+          <div class="item-subtitle">business.facebook.com/commerce — this is where product data lives</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → grid menu (⊞) → <strong>"Commerce Manager"</strong> (may also appear as "Catalogs")</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"Add catalog"</strong> → select <strong>"Ecommerce"</strong> as the catalog type</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Name it <code>Stündenglass Products</code> → click <strong>"Create"</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Inside the catalog, click <strong>"Add items"</strong> → select <strong>"Use a data feed"</strong> (this auto-syncs from Shopify so products stay updated)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">In your Shopify Admin, go to <strong>Sales channels → Facebook &amp; Instagram → Settings</strong> and find the <strong>product feed URL</strong> — copy it</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Paste that URL into the Meta data feed setup → set sync frequency to <strong>"Daily"</strong> → click <strong>"Upload"</strong></div></div>
+          </div>
+          <div class="detail-note"><strong>The feed URL keeps your catalog current automatically.</strong> When you update prices or add new products in Shopify, the Meta catalog syncs daily without any manual work.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-13" onclick="toggleItem(13)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,13)"><span class="check-icon">✓</span></div>
+        <div class="item-num">14</div>
+        <div class="item-main">
+          <div class="item-title">Create a product catalog for G Pen</div>
+          <div class="item-subtitle">Same process — separate catalog for each brand</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Commerce Manager → <strong>"Add catalog"</strong> → <strong>"Ecommerce"</strong> → name it <code>G Pen Products</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Add items via data feed → get feed URL from G Pen Shopify Admin → paste and set to daily sync</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item warn" id="item-14" onclick="toggleItem(14)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,14)"><span class="check-icon">✓</span></div>
+        <div class="item-num">15</div>
+        <div class="item-main">
+          <div class="item-title">Review and clean product titles for compliance <span class="tag warn">Important</span></div>
+          <div class="item-subtitle">Product titles pulled from Shopify will be used verbatim in ads — check every one</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>What to Check</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Commerce Manager → open the Stündenglass catalog → click <strong>"Items"</strong> to see all products</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Scan every product title. <strong>Remove or replace</strong> any word like: hookah, bong, pipe, smoke, smoking, vape, cannabis, weed, 420, or herb</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Good title examples:</strong> "Stündenglass Gravity Infuser — Tyson Collaboration" / "G Pen Connect — Precision Concentrate Device" / "360° Glass Gravity Device — Limited Edition"</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Update any non-compliant titles directly in <strong>Shopify</strong> (not Meta) — the catalog will re-sync overnight</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Repeat the same review for the G Pen catalog</div></div>
+          </div>
+          <div class="detail-note red"><strong>This is the step most people skip — and it's why accounts get banned.</strong> Meta's automated review scans product titles. One flagged product title can get the entire catalog and ad account disabled.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-15" onclick="toggleItem(15)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,15)"><span class="check-icon">✓</span></div>
+        <div class="item-num">16</div>
+        <div class="item-main">
+          <div class="item-title">Connect each catalog to its corresponding primary ad account</div>
+          <div class="item-subtitle">Catalogs must be linked to ad accounts before they can be used in campaigns</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Commerce Manager → open <strong>Stündenglass Products</strong> catalog → click <strong>"Settings"</strong> tab</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Under <strong>"Ad account access"</strong> → click <strong>"Add ad accounts"</strong> → select <strong>Stündenglass — Primary</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Repeat: link <strong>G Pen Products</strong> catalog → <strong>G Pen — Primary</strong> ad account</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-16" onclick="toggleItem(16)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,16)"><span class="check-icon">✓</span></div>
+        <div class="item-num">17</div>
+        <div class="item-main">
+          <div class="item-title">Apply for Meta Business Verification</div>
+          <div class="item-subtitle">Verifying your business unlocks higher spend limits faster and increases account trust</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Business Manager → click <strong>"Business settings"</strong> (the gear icon) → <strong>"Security center"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Under <strong>"Business verification"</strong> click <strong>"Start verification"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">You'll be asked to confirm your legal business name, address, and phone number</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Upload a <strong>business document</strong> — any one of: business license, tax certificate, incorporation document, or official utility bill in the business name</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Submit and wait. Meta reviews in 3–5 business days. You can continue with other steps while this is pending.</div></div>
+          </div>
+          <div class="detail-note"><strong>This is a one-time process</strong> that unlocks higher daily spend limits much faster than waiting for the algorithm to raise them organically. Worth doing early even though it takes a few days.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 3 -->
+
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase" id="phase-3">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 4</div>
+      <div class="phase-title">Warm Backup Accounts</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-3" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-3">0 / 3</div>
+      </div>
+      <div class="phase-meta">Weeks 1–3 · Running in Background</div>
+    </div>
+    <div class="section-intro">New ad accounts with zero spend history get flagged more easily and have stricter review processes. The fix is to run a small amount of harmless ad spend on backup accounts for 2–3 weeks before you need them. This builds a spend history and tells Meta these are legitimate, active accounts.</div>
+
+    <div class="item" id="item-17" onclick="toggleItem(17)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,17)"><span class="check-icon">✓</span></div>
+        <div class="item-num">18</div>
+        <div class="item-main">
+          <div class="item-title">Create a simple brand awareness post on each Facebook Page</div>
+          <div class="item-subtitle">You need at least one published post on the page before you can run ads from it</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Visit the Stündenglass Facebook Page you created → click <strong>"Create post"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Upload a clean product image (beauty shot, no smoking imagery) and write a short caption focused on design: <em>"Precision-engineered. Limited edition. The Stündenglass gravity infuser."</em></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Click <strong>"Publish"</strong> — this post is now live and the page can run ads</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Repeat for the G Pen Facebook Page</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-18" onclick="toggleItem(18)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,18)"><span class="check-icon">✓</span></div>
+        <div class="item-num">19</div>
+        <div class="item-main">
+          <div class="item-title">Launch a $20/day brand awareness ad on all 4 backup accounts <span class="tag warn">Run for 21 Days</span></div>
+          <div class="item-subtitle">Stündenglass Backup 1 &amp; 2 · G Pen Backup 1 &amp; 2 — brand content only, no products</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Switch into <strong>Stündenglass — Backup 1</strong> ad account → go to <strong>Ads Manager</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"+ Create"</strong> → objective: <strong>"Awareness"</strong> → click <strong>"Continue"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Campaign budget: <strong>$20/day</strong> · Audience: US + Canada · Ages 21–55 · No other targeting needed</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Ad creative: use a clean product image and short brand caption (no smoking, no cannabis language)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Link to: stundenglass.com homepage · Click <strong>"Publish"</strong></div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat for Stündenglass Backup 2, G Pen Backup 1, and G Pen Backup 2</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-body">Let these run for a minimum of <strong>21 days</strong> without pausing them — the goal is spend history, not performance</div></div>
+          </div>
+          <div class="detail-note green"><strong>Total cost:</strong> 4 accounts × $20/day × 21 days = <strong>~$1,680</strong>. This is insurance. An account with 3 weeks of clean spend history is significantly less likely to get flagged when you start running product ads.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-19" onclick="toggleItem(19)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,19)"><span class="check-icon">✓</span></div>
+        <div class="item-num">20</div>
+        <div class="item-main">
+          <div class="item-title">Apply for Meta Business Verification (if not already done in Phase 3)</div>
+          <div class="item-subtitle">A reminder — this should be running in parallel while backups warm</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <div class="steps">
+            <div class="step"><div class="step-n">→</div><div class="step-body">See Step 17 above for full instructions. If you've already submitted, just track the status in <strong>Business Settings → Security Center</strong>. Should be approved within 5 business days.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 4 -->
+
+
+  <!-- ══ PHASE 5 ══ -->
+  <div class="phase" id="phase-4">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 5</div>
+      <div class="phase-title">Build Your Audiences</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-4" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-4">0 / 4</div>
+      </div>
+      <div class="phase-meta">Week 2</div>
+    </div>
+    <div class="section-intro">Audiences are the groups of people your ads will target. You'll build three types: a Custom Audience (existing customers), a Lookalike Audience (people similar to your existing customers), and a Retargeting Audience (people who visited the site but didn't buy). These are your most valuable targeting tools.</div>
+
+    <div class="item" id="item-20" onclick="toggleItem(20)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,20)"><span class="check-icon">✓</span></div>
+        <div class="item-num">21</div>
+        <div class="item-main">
+          <div class="item-title">Export customer email lists from Shopify/Klaviyo for both brands</div>
+          <div class="item-subtitle">You'll upload these to Meta to create Custom Audiences for lookalike targeting</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>From Shopify (simplest)</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Shopify Admin → <strong>Customers</strong> → click <strong>"Export"</strong> in the top right</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Select <strong>"All customers"</strong> → <strong>"Export customers"</strong> → a CSV will be emailed to you</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Save the file as <code>stundenglass-customers.csv</code>. Repeat for G Pen: <code>gpen-customers.csv</code></div></div>
+          </div>
+          <div class="detail-note"><strong>From Klaviyo (better — bigger list):</strong> In Klaviyo → Lists &amp; Segments → select your main list → "Export" → choose "Email address" column at minimum. Klaviyo lists tend to be larger than Shopify customer exports because they include email subscribers who haven't purchased yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-21" onclick="toggleItem(21)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,21)"><span class="check-icon">✓</span></div>
+        <div class="item-num">22</div>
+        <div class="item-main">
+          <div class="item-title">Upload customer lists to Meta as Custom Audiences</div>
+          <div class="item-subtitle">One Custom Audience per brand — Meta matches emails to Facebook accounts</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Ads Manager (inside the Stündenglass Primary ad account) → click the grid menu → <strong>"Audiences"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Click <strong>"+ Create audience"</strong> → <strong>"Custom audience"</strong> → <strong>"Customer list"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Click <strong>"Upload file"</strong> → select your <code>stundenglass-customers.csv</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Map the columns: set <strong>Email</strong> as the identifier. If you have phone numbers, map those too — more data = better match rate.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Name it <code>Stündenglass — All Customers</code> → click <strong>"Create audience"</strong></div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat in the G Pen Primary ad account with the G Pen customer list</div></div>
+          </div>
+          <div class="detail-note"><strong>Match rate:</strong> Meta typically matches 40–60% of emails to Facebook accounts. A list of 5,000 customers might yield 2,500–3,000 matched accounts — large enough to build a strong lookalike audience from.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-22" onclick="toggleItem(22)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,22)"><span class="check-icon">✓</span></div>
+        <div class="item-num">23</div>
+        <div class="item-main">
+          <div class="item-title">Create 1%, 2%, and 3% Lookalike Audiences from each customer list</div>
+          <div class="item-subtitle">Lookalikes find people who "look like" your best customers — most efficient cold traffic targeting</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In <strong>Audiences</strong> → click <strong>"+ Create audience"</strong> → <strong>"Lookalike audience"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Source:</strong> select the <code>Stündenglass — All Customers</code> custom audience you just created</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Country:</strong> United States · <strong>Audience size:</strong> select <strong>1%</strong> (this is the most similar to your customers — most targeted)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Name it <code>Stündenglass LAL 1% US</code> → click <strong>"Create audience"</strong></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Repeat to create <code>Stündenglass LAL 2% US</code> and <code>Stündenglass LAL 3% US</code></div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat all steps for G Pen in the G Pen Primary ad account</div></div>
+          </div>
+          <div class="detail-note"><strong>1% vs 3%:</strong> 1% Lookalike = smaller audience, more targeted, higher ROAS but limited scale. 3% = larger audience, slightly less targeted, more scale. Start with 1% and expand to 2–3% once you've confirmed it works.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-23" onclick="toggleItem(23)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,23)"><span class="check-icon">✓</span></div>
+        <div class="item-num">24</div>
+        <div class="item-main">
+          <div class="item-title">Create website retargeting audiences (past 30-day visitors)</div>
+          <div class="item-subtitle">People who visited the site but didn't buy — highest-intent audience you have</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In <strong>Audiences</strong> → <strong>"+ Create audience"</strong> → <strong>"Custom audience"</strong> → <strong>"Website"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Select your <strong>Stündenglass Pixel</strong> as the source</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Rule: <strong>"All website visitors"</strong> · Timeframe: <strong>30 days</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Name it <code>Stündenglass — Site Visitors 30d</code> → click <strong>"Create audience"</strong></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Create a second one: Rule: <strong>"AddToCart but NOT Purchase"</strong> in the last 14 days. Name it <code>Stündenglass — Abandoned Cart 14d</code> — this is your hottest retargeting audience.</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Repeat both for G Pen</div></div>
+          </div>
+          <div class="detail-note"><strong>Note:</strong> The pixel needs to collect data before these audiences populate. If the pixel was just installed, give it 7–14 days of traffic before the audience sizes are large enough to use.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 5 -->
+
+
+  <!-- ══ PHASE 6 ══ -->
+  <div class="phase" id="phase-5">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 6</div>
+      <div class="phase-title">Launch Campaigns</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-5" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-5">0 / 5</div>
+      </div>
+      <div class="phase-meta">Week 2</div>
+    </div>
+    <div class="section-intro">You'll launch three campaign types for each brand. Start at 50% of what the agency currently spends — this gives the new account room to learn without burning through budget during the warmup period.</div>
+
+    <div class="item" id="item-24" onclick="toggleItem(24)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,24)"><span class="check-icon">✓</span></div>
+        <div class="item-num">25</div>
+        <div class="item-main">
+          <div class="item-title">Create an Advantage+ Shopping Campaign (ASC) for Stündenglass <span class="tag critical">Main Campaign</span></div>
+          <div class="item-subtitle">This is the same format the agency runs — the highest-performing format for this product category</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In <strong>Stündenglass — Primary</strong> ad account → Ads Manager → click <strong>"+ Create"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Objective: <strong>"Sales"</strong> → click <strong>"Continue"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">When prompted, select <strong>"Advantage+ Shopping Campaign"</strong> (Meta will suggest this automatically for the Sales objective)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Daily budget:</strong> Start at <strong>50% of what the agency currently spends</strong> on Stündenglass per day (e.g., if agency runs $600/day, start at $300/day)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body"><strong>Catalog:</strong> select <code>Stündenglass Products</code> · <strong>Countries:</strong> US, Canada, UK, Australia (wherever you currently ship)</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body"><strong>Pixel:</strong> select <code>Stündenglass Website Pixel</code> · <strong>Conversion event:</strong> <code>Purchase</code></div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-body">Ad creative: upload 3–5 product images (beauty shots only — no smoking or use imagery). Meta will automatically mix and match them.</div></div>
+            <div class="step"><div class="step-n">8</div><div class="step-body">Review and click <strong>"Publish"</strong> — the campaign will enter a review period (usually 24–48 hours before delivery starts)</div></div>
+          </div>
+          <div class="detail-note green"><strong>Why Advantage+ Shopping?</strong> Meta's AI picks the best audience, placement, and creative combination automatically. It's the least manually intensive format and has the best track record for this product category. This is what the agency runs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-25" onclick="toggleItem(25)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,25)"><span class="check-icon">✓</span></div>
+        <div class="item-num">26</div>
+        <div class="item-main">
+          <div class="item-title">Create an Advantage+ Shopping Campaign for G Pen</div>
+          <div class="item-subtitle">Same setup as above in the G Pen Primary ad account</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <div class="steps">
+            <div class="step"><div class="step-n">→</div><div class="step-body">Follow the exact same steps as item 25, but inside the <strong>G Pen — Primary</strong> ad account. Select the <code>G Pen Products</code> catalog and <code>G Pen Website Pixel</code>. Start at 50% of agency's current G Pen daily budget.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-26" onclick="toggleItem(26)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,26)"><span class="check-icon">✓</span></div>
+        <div class="item-num">27</div>
+        <div class="item-main">
+          <div class="item-title">Create retargeting campaigns for both brands</div>
+          <div class="item-subtitle">Show specific products to people who already visited the site — highest-converting campaign type</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In the primary ad account → <strong>"+ Create"</strong> → objective: <strong>"Sales"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">This time, choose a <strong>manual Sales campaign</strong> (not Advantage+) so you can specify your retargeting audience</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Ad set audience:</strong> select <code>Stündenglass — Abandoned Cart 14d</code> (or site visitors 30d if cart audience is too small)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Ad format:</strong> select <strong>"Catalog"</strong> → <strong>"Dynamic"</strong> — this automatically shows each person the specific product they viewed</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body"><strong>Budget:</strong> $50–100/day per brand</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-body">Publish. Repeat for G Pen.</div></div>
+          </div>
+          <div class="detail-note"><strong>Dynamic retargeting</strong> automatically shows each visitor the exact product they looked at — no manual creative needed. It just reads from the catalog you already set up.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-27" onclick="toggleItem(27)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,27)"><span class="check-icon">✓</span></div>
+        <div class="item-num">28</div>
+        <div class="item-main">
+          <div class="item-title">Create lookalike campaigns for both brands</div>
+          <div class="item-subtitle">Use the 1% Lookalike Audiences you built in Phase 5 to find new buyers</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Create a new manual Sales campaign → ad set audience: <code>Stündenglass LAL 1% US</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Ad format: <strong>Catalog</strong> (dynamic) — same as retargeting but pointed at cold lookalike audience</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Budget:</strong> $100–200/day per brand</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Publish. Repeat for G Pen using <code>G Pen LAL 1% US</code>.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-28" onclick="toggleItem(28)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,28)"><span class="check-icon">✓</span></div>
+        <div class="item-num">29</div>
+        <div class="item-main">
+          <div class="item-title">Monitor the first 72 hours closely — watch for review rejections</div>
+          <div class="item-subtitle">New accounts are reviewed more strictly. Common issues are easy to fix if caught early.</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>What to Watch For</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Ads Manager → check the <strong>Delivery</strong> column. It should say <strong>"Active"</strong> or <strong>"In review."</strong> If it says <strong>"Rejected"</strong> — click the rejection notice to see the reason.</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Most common rejection reason:</strong> product titles or ad copy flagging a restricted word. Fix the title in Shopify (catalog will resync) or edit the ad copy, then click <strong>"Request review"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">If an ad is rejected and you've fixed the content, you can submit a manual review request directly in Ads Manager</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Do NOT:</strong> create duplicate campaigns in frustration. Multiple rejected campaigns in a short time period increases the risk of account-level review.</div></div>
+          </div>
+          <div class="detail-note red"><strong>If an entire ad account gets restricted:</strong> switch to a backup account immediately and continue running from there. Do not attempt to run ads from a restricted account. File an appeal from the Business Manager support center.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 6 -->
+
+
+  <!-- ══ PHASE 7 ══ -->
+  <div class="phase" id="phase-6">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 7</div>
+      <div class="phase-title">Connect Claude + Daily Optimization</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-6" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-6">0 / 3</div>
+      </div>
+      <div class="phase-meta">Week 3</div>
+    </div>
+    <div class="section-intro">This is what replaces the agency's day-to-day work. Once campaigns are live and tracking, Claude connects directly to your Meta ad accounts via the official Meta Ads MCP integration and runs a daily performance review with budget recommendations.</div>
+
+    <div class="item" id="item-29" onclick="toggleItem(29)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,29)"><span class="check-icon">✓</span></div>
+        <div class="item-num">30</div>
+        <div class="item-main">
+          <div class="item-title">Connect the Meta Ads MCP to Claude</div>
+          <div class="item-subtitle">Official Meta/Anthropic integration — gives Claude read/write access to your ad accounts</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Go to <strong>claude.ai</strong> → click your profile icon (top right) → <strong>"Settings"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Navigate to <strong>"Integrations"</strong> (or "Connections") → click <strong>"Add integration"</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Search for or enter: <code>mcp.facebook.com/ads</code> → click <strong>"Connect"</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">A Meta login window will open → log in with the Facebook account that owns your Business Manager → click <strong>"Allow"</strong> to grant Claude access</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Back in Claude → start a new conversation and type: <em>"Connect to my Meta ad accounts and list all active campaigns for Stündenglass and G Pen."</em> — Claude should return a list of your campaigns.</div></div>
+          </div>
+          <div class="detail-note green"><strong>What Claude can do once connected:</strong> pull daily performance data, adjust campaign budgets up or down, pause underperforming campaigns, flag anomalies, and generate written reports — all from a single daily conversation.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-30" onclick="toggleItem(30)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,30)"><span class="check-icon">✓</span></div>
+        <div class="item-num">31</div>
+        <div class="item-main">
+          <div class="item-title">Set up the daily morning review routine</div>
+          <div class="item-subtitle">15 minutes each morning — this replaces everything the agency was doing daily</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>The Daily Workflow</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Each morning, open Claude and start with: <em>"Pull yesterday's performance for Stündenglass and G Pen Meta campaigns. Show spend, ROAS, and any campaigns with ROAS below 2× or above 6×."</em></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">If you have Triple Whale access, copy and paste yesterday's Triple Whale summary into the same Claude conversation for cross-reference</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Ask Claude: <em>"Based on this data, what budget changes would you recommend today? Make the changes if they look right to me."</em></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Review Claude's recommendations → confirm → Claude executes the changes directly in Meta</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">Done. Total time: 10–15 minutes.</div></div>
+          </div>
+          <div class="detail-note"><strong>Rules to tell Claude on day one:</strong> "Scale any campaign with ROAS &gt; 5× by 20% same day. Pause any campaign with ROAS &lt; 0.8× by 10AM. Never let daily spend drop more than 20% without flagging me first."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-31" onclick="toggleItem(31)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,31)"><span class="check-icon">✓</span></div>
+        <div class="item-num">32</div>
+        <div class="item-main">
+          <div class="item-title">Set spend alerts in Meta Ads Manager as a safety net</div>
+          <div class="item-subtitle">Automated email alerts if daily spend goes above or below your thresholds</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Ads Manager → click the <strong>Rules</strong> button (top right of the campaign list) → <strong>"Create new rule"</strong></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Rule 1 — ROAS floor: <strong>Condition:</strong> "ROAS is less than 0.8" · <strong>Action:</strong> "Turn off campaign" · <strong>Time range:</strong> today · <strong>Send email notification to:</strong> your email</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Rule 2 — Overspend alert: <strong>Condition:</strong> "Daily spend is greater than [120% of your target budget]" · <strong>Action:</strong> "Send notification only" (don't auto-pause)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Apply these rules to all active campaigns. Repeat for both brands.</div></div>
+          </div>
+          <div class="detail-note green"><strong>These rules are your safety net</strong> — if something goes wrong overnight (like the Feb 20 disaster), the automated rule catches it before the day is over. Claude handles the daily strategy; these rules handle emergencies.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 7 -->
+
+
+  <!-- ══ PHASE 8 ══ -->
+  <div class="phase" id="phase-7">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 8</div>
+      <div class="phase-title">Parallel Run &amp; Agency Exit</div>
+      <div class="phase-progress-wrap">
+        <div class="phase-track"><div class="phase-fill" id="phase-fill-7" style="width:0%"></div></div>
+        <div class="phase-count" id="phase-count-7">0 / 5</div>
+      </div>
+      <div class="phase-meta">Week 4</div>
+    </div>
+    <div class="section-intro">Don't shut off the agency until your new accounts are proven. Run both in parallel at matching budgets for 7 days, compare ROAS side-by-side in Triple Whale, and only give notice once you're confident. This protects the revenue momentum you've already built.</div>
+
+    <div class="item" id="item-32" onclick="toggleItem(32)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,32)"><span class="check-icon">✓</span></div>
+        <div class="item-num">33</div>
+        <div class="item-main">
+          <div class="item-title">Increase new account budgets to match the agency — run parallel for 7 days</div>
+          <div class="item-subtitle">Same daily spend on both sets of accounts — true apples-to-apples comparison</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In your new Stündenglass Primary account → increase daily budgets to match whatever the agency is spending per day on Stündenglass</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Do the same for G Pen Primary account</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Keep the agency running at their normal budget — do not change anything on their side during this test</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Run both for exactly 7 days. Note the start date.</div></div>
+          </div>
+          <div class="detail-note"><strong>Yes, you'll be spending 2× on ads for 7 days.</strong> At ~$600/day per brand, that's an extra ~$8,400 total. Think of it as the cost of a clean, risk-free transition. Much cheaper than having revenue drop during a cold switch.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-33" onclick="toggleItem(33)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,33)"><span class="check-icon">✓</span></div>
+        <div class="item-num">34</div>
+        <div class="item-main">
+          <div class="item-title">Compare ROAS daily in Triple Whale — use source-level attribution</div>
+          <div class="item-subtitle">Triple Whale can show you ROAS by ad account — confirm new accounts are within 10–20% of agency</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">In Triple Whale → go to the <strong>Ads</strong> or <strong>Attribution</strong> section</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Filter by <strong>Meta/Facebook</strong> as the channel → break down by <strong>ad account</strong> or <strong>campaign</strong></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Each morning, note: new account ROAS vs. agency account ROAS for the prior day</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Decision threshold:</strong> if new account ROAS is within 10–20% of agency ROAS for <strong>5 consecutive days</strong> → you're ready to give notice</div></div>
+          </div>
+          <div class="detail-note"><strong>Expect the new account to start lower</strong> in days 1–3. The ML algorithm is learning. Day 4–7 is when it typically stabilizes. If ROAS is still more than 30% below agency by day 7, extend the parallel run for another week before giving notice.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-34" onclick="toggleItem(34)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,34)"><span class="check-icon">✓</span></div>
+        <div class="item-num">35</div>
+        <div class="item-main">
+          <div class="item-title">Request your data package from the agency before giving notice</div>
+          <div class="item-subtitle">Get what you're owed while they still have incentive to cooperate</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>What to Request</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body"><strong>All active campaign IDs</strong> and their structure (campaign → ad set → ad breakdown)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Top-performing audience segments</strong> — interest targeting, demographic breakdowns, any custom audiences they built</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Ad creative files</strong> — any image or video that has run successfully is compliance-proven by Meta's review system. Those files have real value.</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Historical performance data export</strong> — Ads Manager → Campaigns → select all time → Export CSV. Ask them to send this before accounts are transferred.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body"><strong>Account structure documentation</strong> — naming conventions, budget allocation logic, any notes on what's been tested</div></div>
+          </div>
+          <div class="detail-note red"><strong>Do this before giving notice.</strong> Once agencies know they're losing the account, cooperation tends to decrease. Request everything while you're still a paying client.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-35" onclick="toggleItem(35)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,35)"><span class="check-icon">✓</span></div>
+        <div class="item-num">36</div>
+        <div class="item-main">
+          <div class="item-title">Send 30-day written notice to the agency</div>
+          <div class="item-subtitle">Check your contract for the exact notice period — likely 30 days</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>What to Include in the Notice</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">Send by <strong>email</strong> to your account manager and CC any billing contacts</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">State: the effective termination date (30 days from the email date, or whatever your contract specifies)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Request: final performance report, all campaign data exports, and confirmation of account access removal on the termination date</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Ask them to continue running campaigns as normal through the notice period — you're still paying, you still want the traffic</div></div>
+          </div>
+          <div class="detail-note"><strong>Review your contract</strong> before sending — check for minimum notice period, any penalty clauses for early termination, and whether there's a minimum spend commitment in the remaining period.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-36" onclick="toggleItem(36)">
+      <div class="item-header">
+        <div class="item-check" onclick="toggleCheck(event,36)"><span class="check-icon">✓</span></div>
+        <div class="item-num">37</div>
+        <div class="item-main">
+          <div class="item-title">Transfer full budget to new accounts on termination date</div>
+          <div class="item-subtitle">Increase new account daily budgets to full target. Agency accounts stop the same day.</div>
+        </div>
+        <div class="item-expand">▾</div>
+      </div>
+      <div class="item-detail">
+        <div class="detail-inner">
+          <h4>Step by Step</h4>
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-body">On the termination date, increase new account daily budgets from parallel-run levels to the full target (e.g., $600/day Stündenglass + $500/day G Pen)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-body">Confirm agency campaigns are paused/removed from their side</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-body">Remove agency from your Business Manager: <strong>Business Settings → People → remove agency team members</strong></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-body">Monitor closely for 72 hours — first days at full budget on new accounts are the most important to watch</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-body">🎉 <strong>You're running your own Meta ads.</strong> Daily Claude review from here.</div></div>
+          </div>
+          <div class="detail-note green"><strong>You made it.</strong> From this point, the daily workflow is: morning Claude review → approve/reject recommendations → 15 minutes done. No more agency fees. No more waiting for weekly reports.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end phase 8 -->
+
+  <div id="completion">
+    <h2>All 37 steps complete.</h2>
+    <p style="margin-top:8px;">You're running your own Meta ads. Time to print money.</p>
+  </div>
+
+</div><!-- end container -->
+
+<script>
+const TOTAL = 37;
+const phases = [
+  { start: 0, count: 7 },
+  { start: 7, count: 5 },
+  { start: 12, count: 5 },
+  { start: 17, count: 3 },
+  { start: 20, count: 4 },
+  { start: 24, count: 5 },
+  { start: 29, count: 3 },
+  { start: 32, count: 5 }
+];
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('grenco-checklist') || '{}'); } catch(e) { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem('grenco-checklist', JSON.stringify(state));
+}
+
+function toggleCheck(e, idx) {
+  e.stopPropagation();
+  const state = loadState();
+  state[idx] = !state[idx];
+  saveState(state);
+  renderState(state);
+}
+
+function toggleItem(idx) {
+  const el = document.getElementById('item-' + idx);
+  el.classList.toggle('open');
+}
+
+function renderState(state) {
+  let done = 0;
+  for (let i = 0; i < TOTAL; i++) {
+    const el = document.getElementById('item-' + i);
+    if (!el) continue;
+    if (state[i]) { el.classList.add('done'); done++; }
+    else { el.classList.remove('done'); }
+  }
+
+  // Global progress
+  const pct = Math.round((done / TOTAL) * 100);
+  document.getElementById('global-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + TOTAL;
+
+  // Phase progress
+  phases.forEach((p, pi) => {
+    let pDone = 0;
+    for (let j = p.start; j < p.start + p.count; j++) {
+      if (state[j]) pDone++;
+    }
+    const pPct = Math.round((pDone / p.count) * 100);
+    const fill = document.getElementById('phase-fill-' + pi);
+    const count = document.getElementById('phase-count-' + pi);
+    if (fill) fill.style.width = pPct + '%';
+    if (count) count.textContent = pDone + ' / ' + p.count;
+  });
+
+  // Completion
+  document.getElementById('completion').style.display = done === TOTAL ? 'block' : 'none';
+}
+
+function resetAll() {
+  if (!confirm('Reset all checkboxes? Your progress will be cleared.')) return;
+  saveState({});
+  renderState({});
+  document.querySelectorAll('.item.open').forEach(el => el.classList.remove('open'));
+}
+
+// Init
+renderState(loadState());
+</script>
+</body>
+</html>
